@@ -6,11 +6,17 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:ship": "jest --testPathPattern=Ship.test.js",
+    "test:player": "jest --testPathPattern=Player.test.js",
+    "test:gameboard": "jest --testPathPattern=Gameboard.test.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.22.8",
+    "@babel/preset-env": "^7.22.7",
+    "babel-jest": "^29.6.1",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
     "jest": "^25.0.0",
