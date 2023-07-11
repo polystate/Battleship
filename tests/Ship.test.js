@@ -1,21 +1,14 @@
-import Ship from "../src/Ship.js";
+import { Ship, shipChoices } from "../src/Ship.js";
 
 describe("Component: Ship Creation", () => {
   test("Ship constructor accepts valid ship name choices and doesn't throw an error", () => {
-    const shipChoices = {
-      Carrier: 5,
-      Battleship: 4,
-      Cruiser: 3,
-      Submarine: 3,
-      Destroyer: 2,
-    };
     const validShipNames = Object.keys(shipChoices);
     validShipNames.forEach((name) => {
       expect(() => Ship(name)).not.toThrow();
     });
   });
   test("Ship constructor throws error for invalid ship names", () => {
-    const invalidShipNames = ["InvalidShip", "UnknownShip", "RandomShip"];
+    const invalidShipNames = ["Cruiserr", 772, "", ["Cruiser"]];
     invalidShipNames.forEach((name) => {
       expect(() => Ship(name)).toThrowError("Invalid ship name");
     });

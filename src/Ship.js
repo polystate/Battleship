@@ -7,7 +7,7 @@ const shipChoices = {
 };
 
 const Ship = (name) => {
-  if (!(name in shipChoices)) {
+  if (!(name in shipChoices) || typeof name !== "string") {
     throw new Error(`Invalid ship name: ${name}`);
   }
   const length = shipChoices[name];
@@ -32,4 +32,4 @@ const Ship = (name) => {
   return { getHit, isSunk, logInfo };
 };
 
-export default Ship;
+export { Ship, shipChoices };
