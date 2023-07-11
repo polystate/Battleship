@@ -1,5 +1,16 @@
-const Ship = (length, name) => {
-  if (!length) return;
+const shipChoices = {
+  Carrier: 5,
+  Battleship: 4,
+  Cruiser: 3,
+  Submarine: 3,
+  Destroyer: 2,
+};
+
+const Ship = (name) => {
+  if (!(name in shipChoices)) {
+    throw new Error(`Invalid ship name: ${name}`);
+  }
+  const length = shipChoices[name];
   let timesHit = 0;
   const logInfo = () => {
     return {

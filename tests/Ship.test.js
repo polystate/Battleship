@@ -1,57 +1,82 @@
 import Ship from "../src/Ship.js";
 
 describe("Component: Ship Creation", () => {
-  test("if ship object is created with 0 length its undefined and obj doesn't get created", () => {
-    expect(Ship(0)).toBe(undefined);
+  test("Ship constructor accepts valid ship name choices and doesn't throw an error", () => {
+    const shipChoices = {
+      Carrier: 5,
+      Battleship: 4,
+      Cruiser: 3,
+      Submarine: 3,
+      Destroyer: 2,
+    };
+    const validShipNames = Object.keys(shipChoices);
+    validShipNames.forEach((name) => {
+      expect(() => Ship(name)).not.toThrow();
+    });
+  });
+  test("Ship constructor throws error for invalid ship names", () => {
+    const invalidShipNames = ["InvalidShip", "UnknownShip", "RandomShip"];
+    invalidShipNames.forEach((name) => {
+      expect(() => Ship(name)).toThrowError("Invalid ship name");
+    });
+  });
+  test("Ship initialization with name 'Carrier' should return its proper object properties that are methods", () => {
+    expect(Ship("Carrier")).toStrictEqual({
+      getHit: expect.any(Function),
+      isSunk: expect.any(Function),
+      logInfo: expect.any(Function),
+    });
   });
 });
 
 describe("Component: logInfo should log the proper health and ship name", () => {
-  const ship = Ship(3, "Striker");
-  test("logInfo should log name of ship 'Striker' and its health of 3. returns object.", () => {
-    expect(ship.logInfo()).toStrictEqual({
+  const cruiser = Ship("Cruiser");
+  test("logInfo should log name of ship 'Cruiser' and its health of 3. returns object.", () => {
+    expect(cruiser.logInfo()).toStrictEqual({
       health: 3,
-      name: "Striker",
+      name: "Cruiser",
     });
   });
-  test("logInfo should log name of ship 'Striker' and its health should be 2 after getting hit. returns object.", () => {
-    ship.getHit();
-    expect(ship.logInfo()).toStrictEqual({
+  test("logInfo should log name of ship 'Cruiser' and its health should be 2 after getting hit. returns object.", () => {
+    cruiser.getHit();
+    expect(cruiser.logInfo()).toStrictEqual({
       health: 2,
-      name: "Striker",
+      name: "Cruiser",
     });
   });
 });
 
 describe("Component: getHit()", () => {
   test("getHit() should return a console error if ship is already sunk.", () => {
-    const ship = Ship(1, "Striker");
+    const submarine = Ship("Submarine");
     const consoleErrorSpy = jest.spyOn(console, "error");
-    ship.getHit();
-    ship.getHit();
+    submarine.getHit();
+    submarine.getHit();
+    submarine.getHit();
+    submarine.getHit();
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      `Ship Striker has already been sunk.`
+      `Ship Submarine has already been sunk.`
     );
   });
   test("getHit() should return a log of the correct amount of times hit.", () => {
-    const ship = Ship(3, "Striker");
+    const battleship = Ship("Battleship");
     const consoleLogSpy = jest.spyOn(console, "log");
-    ship.getHit();
-    ship.getHit();
+    battleship.getHit();
+    battleship.getHit();
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Ship Striker has been hit 2 times.`
+      `Ship Battleship has been hit 2 times.`
     );
   });
 });
 
 describe("Component: isSunk()", () => {
   test("if ship isSunk() works properly", () => {
-    const ship = Ship(2, "Striker");
-    const ship2 = Ship(2, "Striker");
-    ship.getHit();
-    ship.getHit();
-    ship2.getHit();
-    expect(ship.isSunk()).toBe(true);
-    expect(ship2.isSunk()).toBe(false);
+    const destroyer = Ship("Destroyer");
+    const destroyer2 = Ship("Destroyer");
+    destroyer.getHit();
+    destroyer.getHit();
+    destroyer2.getHit();
+    expect(destroyer.isSunk()).toBe(true);
+    expect(destroyer2.isSunk()).toBe(false);
   });
 });
