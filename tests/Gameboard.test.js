@@ -2,12 +2,16 @@ import Gameboard from "../src/Gameboard.js";
 import { Ship } from "../src/Ship.js";
 
 const gameBoard = Gameboard();
+const battleship = Ship("Battleship");
+const cruiser = Ship("Cruiser");
+const destroyer = Ship("Destroyer");
 
 describe("Component: Gameboard initialization", () => {
-  test("When Gameboard is initialized, it should return the following methods: placeShipVertical, placeShipHorizontal, receiveAttack, isGameOver, and shipPartsHit", () => {
+  test("When Gameboard is initialized, it should return the following properties: grid, selectOrigin, placeShipVertical, placeShipHorizontal, receiveAttack, isGameOver, and shipPartsHit", () => {
     expect(Gameboard()).toStrictEqual({
       grid: expect.any(Object),
-      placeShipOrigin: expect.any(Function),
+      selectOrigin: expect.any(Function),
+      placeShip: expect.any(Function),
       placeShipVertical: expect.any(Function),
       placeShipHorizontal: expect.any(Function),
       receiveAttack: expect.any(Function),
@@ -20,8 +24,7 @@ describe("Component: Gameboard initialization", () => {
   });
 });
 
-describe("Component: Gameboard setup and placeShipOrigin", () => {
-  const battleship = Ship("Battleship");
+describe("Component: Gameboard Setup", () => {
   test("Gameboard should have a grid variable that starts off as a 10x10 2D array filled with false booleans", () => {
     expect(gameBoard.grid).toStrictEqual(
       Array.from({ length: 10 }, () => {
@@ -29,34 +32,88 @@ describe("Component: Gameboard setup and placeShipOrigin", () => {
       })
     );
   });
+});
 
+describe("Component: selectOrigin", () => {
   test("Placing a ship's origin at a coordinate updates the grid variable with Ship object in proper location", () => {
-    gameBoard.placeShipOrigin(battleship, [0, 4]);
+    gameBoard.selectOrigin(battleship, [0, 4]);
     expect(gameBoard.grid[0][4]).toEqual(battleship);
   });
   test("Placing a ship's origin out of bounds should return undefined and break out of the function", () => {
-    expect(gameBoard.placeShipOrigin(Ship("Submarine"), [-1, 0])).toBe(
-      undefined
-    );
-    expect(gameBoard.placeShipOrigin(battleship, [0, 10])).toBe(undefined);
+    expect(gameBoard.selectOrigin(Ship("Submarine"), [-1, 0])).toBe(undefined);
+    expect(gameBoard.selectOrigin(battleship, [0, 10])).toBe(undefined);
   });
   test("Placing a ship's origin on top of another ship should return undefined and break out of the function", () => {
-    gameBoard.placeShipOrigin(battleship, [5, 5]);
-    expect(gameBoard.placeShipOrigin(Ship("Submarine"), [5, 5])).toBe(
-      undefined
-    );
+    gameBoard.selectOrigin(battleship, [5, 5]);
+    expect(gameBoard.selectOrigin(Ship("Submarine"), [5, 5])).toBe(undefined);
   });
 });
 
-describe("Component: placeShipVertical and placeShipHorizontal", () => {
-  const cruiser = Ship("Cruiser");
-  const destroyer = Ship("Destroyer");
-  test("placeShipVertical should have a defined origin variable from the placeShipOrigin method", () => {
-    expect(gameBoard.placeShipVertical(cruiser, [4, 4])).not.toBe(undefined);
-    expect(gameBoard.placeShipVertical(destroyer, [10, 7])).toBe(undefined);
+describe("Component: placeShip", () => {
+  test("placeShip should return undefined when placed out of bounds", () => {
+    expect(gameBoard.placeShip(destroyer, [10, 7], "horizontal")).toBe(
+      undefined
+    );
   });
-  test("placeShipVertical should place 'Cruiser' vertically four squares above its origin", () => {
-    gameBoard.placeShipVertical(cruiser, [4, 4]);
+  test("placeShip should place 'Cruiser' vertically two squares (or its length - 1) above its origin", () => {
+    gameBoard.placeShip(cruiser, [4, 4], "vertical");
+    expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
+    expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
+  });
+  test("placeShip should place 'Destroyer' horizontally one square (or its length - 1) to the right of its origin", () => {
+    gameBoard.placeShip(destroyer, [0, 0], "horizontal");
+    expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
+  });
+  test("placeShip attempts to place 'Cruiser' vertically two squares but goes out of bounds and it returns undefined", () => {
+    expect(gameBoard.placeShip(cruiser, [4, 8], "vertical")).toBe(undefined);
+  });
+  test("placeShip attempts to place 'Battleship' horizontally two squares but goes out of bounds and it returns undefined", () => {
+    expect(gameBoard.placeShip(battleship, [7, 4], "horizontal")).toBe(
+      undefined
+    );
+  });
+  test("placeShip should return undefined when placing a ship on top of an existing ship", () => {
+    // Attempt to place another ship on top of the existing one
+    expect(gameBoard.placeShip(destroyer, [4, 4], "vertical")).toBe(undefined);
+
+    // Verify that the grid remains unchanged
+    expect(gameBoard.grid[4][4]).toStrictEqual(cruiser);
+    expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
+  });
+
+  test("placeShip should return undefined when placing a ship at an invalid coordinate", () => {
+    const initialGrid = gameBoard.grid.map((row) => [...row]);
+
+    expect(gameBoard.placeShip(destroyer, [-1, 0], "horizontal")).toBe(
+      undefined
+    );
+    expect(gameBoard.placeShip(destroyer, [0, -1], "horizontal")).toBe(
+      undefined
+    );
+    expect(gameBoard.placeShip(destroyer, [10, 0], "horizontal")).toBe(
+      undefined
+    );
+    expect(gameBoard.placeShip(destroyer, [0, 10], "horizontal")).toBe(
+      undefined
+    );
+
+    // Verify that the grid remains unchanged
+    expect(gameBoard.grid).toStrictEqual(initialGrid);
+  });
+
+  test("placeShip should place multiple ships without overlapping", () => {
+    // Place the first ship
+    gameBoard.placeShip(cruiser, [4, 4], "vertical");
+
+    // Place a second ship
+    gameBoard.placeShip(destroyer, [0, 0], "horizontal");
+
+    // Verify the grid
+    expect(gameBoard.grid[4][4]).toStrictEqual(cruiser);
+    expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
+    expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
+    expect(gameBoard.grid[0][0]).toStrictEqual(destroyer);
+    expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
   });
 });
 

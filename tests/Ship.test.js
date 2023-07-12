@@ -28,6 +28,7 @@ describe("Component: logInfo should log the proper health and ship name", () => 
     expect(cruiser.logInfo()).toStrictEqual({
       health: 3,
       name: "Cruiser",
+      length: 3,
     });
   });
   test("logInfo should log name of ship 'Cruiser' and its health should be 2 after getting hit. returns object.", () => {
@@ -35,6 +36,7 @@ describe("Component: logInfo should log the proper health and ship name", () => 
     expect(cruiser.logInfo()).toStrictEqual({
       health: 2,
       name: "Cruiser",
+      length: 3,
     });
   });
 });

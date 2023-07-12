@@ -16,6 +16,7 @@ const Ship = (name) => {
     return {
       health: length - timesHit,
       name: name,
+      length: length,
     };
   };
   const getHit = () => {
