@@ -1,6 +1,11 @@
 const Gameboard = () => {
   const grid = Array.from({ length: 10 }, () => Array(10).fill(false));
   let shipPartsHit = 0;
+  const logBoardData = () => {
+    return {
+      hits: shipPartsHit,
+    };
+  };
   const isValidCoordinate = (x, y) => {
     return x >= 0 && x <= 9 && y >= 0 && y <= 9;
   };
@@ -52,10 +57,24 @@ const Gameboard = () => {
   };
   const receiveAttack = (coordinate) => {
     const [x, y] = coordinate;
+    if (!grid[x][y]) {
+      grid[x][y] = null; //mark square as missed or null
+      return; //it's an empty square
+    }
+    if (typeof grid[x][y] === "object") {
+      // then it's a ship part
+      if (grid[x][y].isSunk()) return; //dead ship, skip
+      grid[x][y].getHit();
+      shipPartsHit++;
+      return true;
+    }
   };
-  const isGameOver = () => {};
+  const isGameOver = () => {
+    return logBoardData().hits == 17 ? true : false;
+  };
   return {
     grid,
+    logBoardData,
     selectOrigin,
     placeShip,
     placeShipVertical,
