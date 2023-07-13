@@ -18,7 +18,6 @@ const Gameboard = () => {
   const placeShip = (ship, coordinate, direction) => {
     const origin = selectOrigin(ship, coordinate);
     if (!origin) return;
-
     const [x, y] = origin;
     const tail = ship.logInfo().length - 1;
 
@@ -40,13 +39,21 @@ const Gameboard = () => {
       }
     }
 
+    //push origin to locations
+    ship.logInfo().locations.push([x, y]);
+
     for (let i = 1; i <= tail; i++) {
       if (direction === "vertical") {
         grid[x][y + i] = ship;
+        //push tail to locations
+        ship.logInfo().locations.push([x, y + i]);
       } else if (direction === "horizontal") {
         grid[x + i][y] = ship;
+        //push tail to locations
+        ship.logInfo().locations.push([x + i, y]);
       }
     }
+    return true;
   };
 
   const placeShipVertical = (ship, coordinate) => {

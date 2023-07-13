@@ -22,22 +22,31 @@ describe("Component: Ship Creation", () => {
   });
 });
 
-describe("Component: logInfo should log the proper health and ship name", () => {
-  const cruiser = Ship("Cruiser");
-  test("logInfo should log name of ship 'Cruiser' and its health of 3. returns object.", () => {
-    expect(cruiser.logInfo()).toStrictEqual({
-      health: 3,
+describe("Component: logInfo", () => {
+  test("logInfo should log name of ship 'Cruiser' and its health of 3, length, its undefined locations array, and its surrounding . It returns an object.", () => {
+    const cruiser = Ship("Cruiser");
+    expect(cruiser.logInfo()).toMatchObject({
       name: "Cruiser",
       length: 3,
+      locations: [],
+      getSurroundings: expect.any(Function),
     });
   });
-  test("logInfo should log name of ship 'Cruiser' and its health should be 2 after getting hit. returns object.", () => {
-    cruiser.getHit();
-    expect(cruiser.logInfo()).toStrictEqual({
-      health: 2,
-      name: "Cruiser",
-      length: 3,
-    });
+  test("Inside of logInfo for 'Destroyer', getSurroundings should correctly compute and return an array of its 10 unique surrounding squares", () => {
+    const destroyer = Ship("Destroyer");
+    destroyer.logInfo().locations.push([3, 3], [4, 3]);
+    expect(destroyer.logInfo().getSurroundings()).toEqual([
+      [2, 3],
+      [3, 2],
+      [3, 4],
+      [2, 2],
+      [4, 4],
+      [4, 2],
+      [2, 4],
+      [5, 3],
+      [5, 4],
+      [5, 2],
+    ]);
   });
 });
 

@@ -60,9 +60,28 @@ describe("Component: placeShip", () => {
   test("placeShip should return undefined when placed out of bounds", () => {
     const gameBoard = Gameboard();
     const destroyer = Ship("Destroyer");
+    const carrier = Ship("Carrier");
     expect(gameBoard.placeShip(destroyer, [10, 7], "horizontal")).toBe(
       undefined
     );
+    expect(gameBoard.placeShip(carrier, [5, 6], "vertical")).toBe(undefined);
+  });
+  test("Placement of ship should assign the current coordinates to the ship's 2D locations array in its logInfo() method", () => {
+    const gameBoard = Gameboard();
+    const submarine = Ship("Submarine");
+    gameBoard.placeShip(submarine, [4, 4], "horizontal");
+    expect(submarine.logInfo().locations).toStrictEqual([
+      [4, 4],
+      [5, 4],
+      [6, 4],
+    ]);
+  });
+  test("Valid placement of a ship should return true from the placeShip function", () => {
+    const gameBoard = Gameboard();
+    const carrier = Ship("Carrier");
+    const destroyer = Ship("Destroyer");
+    expect(gameBoard.placeShip(carrier, [5, 5], "vertical")).toBe(true);
+    expect(gameBoard.placeShip(destroyer, [5, 2], "vertical")).toBe(true);
   });
   test("placeShip should place 'Cruiser' vertically two squares (or its length - 1) above its origin", () => {
     const gameBoard = Gameboard();
@@ -131,19 +150,18 @@ describe("Component: placeShip", () => {
     const gameBoard = Gameboard();
     const cruiser = Ship("Cruiser");
     const destroyer = Ship("Destroyer");
-    // Place the first ship
     gameBoard.placeShip(cruiser, [4, 4], "vertical");
-
-    // Place a second ship
     gameBoard.placeShip(destroyer, [0, 0], "horizontal");
-
-    // Verify the grid
     expect(gameBoard.grid[4][4]).toStrictEqual(cruiser);
     expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
     expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
     expect(gameBoard.grid[0][0]).toStrictEqual(destroyer);
     expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
   });
+});
+
+describe("Component: Test for Ships that Touch", () => {
+  test("Placing two ships that have a gap of one square should return undefined", () => {});
 });
 
 describe("Component: Gameboard action methods", () => {
