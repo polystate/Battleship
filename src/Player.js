@@ -1,14 +1,20 @@
 import Gameboard from "./Gameboard.js";
 
-const Player = () => {
-  const player = {};
-
-  player.additionalProperty = "Some value";
+const Player = (turnBoolean = true) => {
+  const player = Object.create(Gameboard());
+  let turn = turnBoolean;
+  player.switchTurn = () => {
+    turn = !turn;
+  };
   player.isTurn = () => {
-    // Some functionality
+    return turn;
+  };
+  player.attackEnemy = (other, coordinate) => {
+    other.receiveAttack(coordinate);
+    player.switchTurn();
+    other.switchTurn();
   };
 
-  Object.setPrototypeOf(player, Gameboard());
   return player;
 };
 
