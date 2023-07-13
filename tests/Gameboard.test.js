@@ -169,7 +169,7 @@ describe("Component: Gameboard action methods", () => {
     const gameBoard = Gameboard();
     expect(gameBoard.receiveAttack([5, 5])).toBe(undefined);
   });
-  test("uses a receiveAttack function that takes a pair of coordinates and determines whether or not the attack hit the ship", () => {
+  test("receiveAttack function takes a pair of coordinates and determines whether or not the attack hit the ship", () => {
     const gameBoard = Gameboard();
     const battleship = Ship("Battleship");
     const cruiser = Ship("Cruiser");
@@ -193,6 +193,7 @@ describe("Component: Gameboard action methods", () => {
     gameBoard.receiveAttack([4, 4]);
     gameBoard.receiveAttack([5, 4]);
     expect(gameBoard.receiveAttack([4, 4])).toBe(undefined);
+    expect(gameBoard.receiveAttack([5, 4])).toBe(undefined);
   });
 
   test("When receiving a hit, should increase shipPartsHit variable by one", () => {
@@ -208,7 +209,7 @@ describe("Component: Gameboard action methods", () => {
     gameBoard.receiveAttack([4, 2]);
     expect(gameBoard.logBoardData().hits).toBe(5);
   });
-  test("keeps track of missed shots by updating grid. missed attacks should also be falsey... in this case null...", () => {
+  test("Keeps track of missed shots by updating grid. missed attacks should also be falsey... in this case null...", () => {
     const gameBoard = Gameboard();
     gameBoard.receiveAttack([9, 9]);
     expect(gameBoard.grid[9][9]).toBe(null);

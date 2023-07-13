@@ -15,6 +15,27 @@ const Player = (turnBoolean = true) => {
     other.switchTurn();
   };
 
+  player.scanMoves = (other) => {
+    const nullCoordinates = [];
+    const legalMoves = [];
+
+    for (let row = 0; row < other.grid.length; row++) {
+      for (let col = 0; col < other.grid[row].length; col++) {
+        const coordinate = [row, col];
+
+        if (other.grid[row][col] === null) {
+          nullCoordinates.push(coordinate);
+        } else {
+          legalMoves.push(coordinate);
+        }
+      }
+    }
+
+    // console.log(nullCoordinates);
+    // console.log(legalMoves);
+    return legalMoves;
+  };
+
   return player;
 };
 
