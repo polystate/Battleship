@@ -38,6 +38,11 @@ const Player = (turnBoolean = true) => {
         return shot[0] === coord[0] && shot[1] === coord[1];
       });
     });
+    player.randomAttack = () => {
+      const validMoves = player.filterMoves();
+      const randomIndex = Math.floor(Math.random() * validMoves.length);
+      return validMoves[randomIndex];
+    };
 
     return validMoves;
   };
@@ -46,15 +51,3 @@ const Player = (turnBoolean = true) => {
 };
 
 export default Player;
-
-// player.filterMoves = (other, filtered) => {
-//   const legalMoves = [];
-//   for (let row = 0; row < other.grid.length; row++) {
-//     for (let col = 0; col < other.grid[row].length; col++) {
-//       if (other.grid[row][col] !== filtered) {
-//         legalMoves.push([row, col]);
-//       }
-//     }
-//   }
-//   return legalMoves;
-// };

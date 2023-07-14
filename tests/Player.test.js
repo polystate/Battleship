@@ -77,6 +77,17 @@ describe("Component: Computer Gameplay", () => {
     const testArr = generateTestArr(7, 5);
     expect(computer.filterMoves()).toEqual(expect.arrayContaining(testArr));
   });
+  test("The Player factory should be able to make a random attack based off its filtered coordinates", () => {
+    const computer = Player(true);
+    const player = Player(false);
+    computer.attackEnemy(player, [2, 4]);
+    player.attackEnemy(computer, [7, 7]);
+    computer.attackEnemy(player, [5, 1]);
+    player.attackEnemy(computer, [9, 7]);
+    const validMoves = computer.filterMoves(player);
+    const randomAttack = computer.randomAttack();
+    expect(validMoves).toContainEqual(randomAttack);
+  });
   // test("The Player factory filterMoves() method should be able to scan for legal moves based on filtered value. [1. Null/Repeated Moves.]", () => {
   //   const computer = Player(true);
   //   const player = Player(false);
