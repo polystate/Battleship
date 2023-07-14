@@ -15,24 +15,15 @@ const Player = (turnBoolean = true) => {
     other.switchTurn();
   };
 
-  player.scanMoves = (other) => {
-    const nullCoordinates = [];
+  player.filterMoves = (other, filtered) => {
     const legalMoves = [];
-
     for (let row = 0; row < other.grid.length; row++) {
       for (let col = 0; col < other.grid[row].length; col++) {
-        const coordinate = [row, col];
-
-        if (other.grid[row][col] === null) {
-          nullCoordinates.push(coordinate);
-        } else {
-          legalMoves.push(coordinate);
+        if (other.grid[row][col] !== filtered) {
+          legalMoves.push([row, col]);
         }
       }
     }
-
-    // console.log(nullCoordinates);
-    // console.log(legalMoves);
     return legalMoves;
   };
 

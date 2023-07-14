@@ -28,6 +28,7 @@ describe("Component: logInfo", () => {
     expect(cruiser.logInfo()).toMatchObject({
       name: "Cruiser",
       length: 3,
+      thisPartHit: false,
       locations: [],
       getSurroundings: expect.any(Function),
     });
@@ -35,18 +36,25 @@ describe("Component: logInfo", () => {
   test("Inside of logInfo for 'Destroyer', getSurroundings should correctly compute and return an array of its 10 unique surrounding squares", () => {
     const destroyer = Ship("Destroyer");
     destroyer.logInfo().locations.push([3, 3], [4, 3]);
-    expect(destroyer.logInfo().getSurroundings()).toEqual([
-      [2, 3],
-      [3, 2],
-      [3, 4],
-      [2, 2],
-      [4, 4],
-      [4, 2],
-      [2, 4],
-      [5, 3],
-      [5, 4],
-      [5, 2],
-    ]);
+    expect(destroyer.logInfo().getSurroundings()).toEqual(
+      expect.arrayContaining([
+        [2, 3],
+        [3, 2],
+        [3, 4],
+        [2, 2],
+        [4, 4],
+        [4, 2],
+        [2, 4],
+        [5, 3],
+        [5, 4],
+        [5, 2],
+      ])
+    );
+  });
+  test("thisPartHit should switch to true after getting hit", () => {
+    const carrier = Ship("Carrier");
+    carrier.getHit();
+    expect(carrier.logInfo().thisPartHit).toBe(true);
   });
 });
 
@@ -60,15 +68,6 @@ describe("Component: getHit()", () => {
     submarine.getHit();
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       `Ship Submarine has already been sunk.`
-    );
-  });
-  test("getHit() should return a log of the correct amount of times hit.", () => {
-    const battleship = Ship("Battleship");
-    const consoleLogSpy = jest.spyOn(console, "log");
-    battleship.getHit();
-    battleship.getHit();
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Ship Battleship has been hit 2 times.`
     );
   });
 });

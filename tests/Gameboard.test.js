@@ -1,6 +1,19 @@
 import Gameboard from "../src/Gameboard.js";
 import { Ship } from "../src/Ship.js";
 
+//Helper Methods
+const destroyEntireShip = (board, ship, origin, alignment) => {
+  const [x, y] = origin;
+  for (let i = 0; i < ship.logInfo().length; i++) {
+    if (alignment === "vertical") {
+      board.receiveAttack([x, y + i]);
+    } else {
+      board.receiveAttack([x + i, y]);
+    }
+  }
+};
+
+//Tests
 describe("Component: Gameboard initialization", () => {
   test("When Gameboard is initialized, it should return the following properties: grid, selectOrigin, placeShipVertical, placeShipHorizontal, receiveAttack, isGameOver, and shipPartsHit", () => {
     const gameBoard = Gameboard();
@@ -190,8 +203,7 @@ describe("Component: Gameboard action methods", () => {
     const gameBoard = Gameboard();
     const destroyer = Ship("Destroyer");
     gameBoard.placeShipHorizontal(destroyer, [4, 4]);
-    gameBoard.receiveAttack([4, 4]);
-    gameBoard.receiveAttack([5, 4]);
+    destroyEntireShip(gameBoard, destroyer, [4, 4], "horizontal");
     expect(gameBoard.receiveAttack([4, 4])).toBe(undefined);
     expect(gameBoard.receiveAttack([5, 4])).toBe(undefined);
   });
@@ -229,27 +241,11 @@ describe("Component: Game over. Simulates an entire game of Battleship.", () => 
     gameBoard.placeShipVertical(destroyer, [5, 5]);
     gameBoard.placeShipHorizontal(submarine, [2, 2]);
     gameBoard.placeShipVertical(cruiser, [9, 4]);
-    gameBoard.receiveAttack([0, 0]);
-    gameBoard.receiveAttack([1, 0]);
-    gameBoard.receiveAttack([2, 0]);
-    gameBoard.receiveAttack([3, 0]);
-    gameBoard.receiveAttack([4, 0]);
-
-    gameBoard.receiveAttack([0, 1]);
-    gameBoard.receiveAttack([1, 1]);
-    gameBoard.receiveAttack([2, 1]);
-    gameBoard.receiveAttack([3, 1]);
-
-    gameBoard.receiveAttack([5, 5]);
-    gameBoard.receiveAttack([5, 6]);
-
-    gameBoard.receiveAttack([2, 2]);
-    gameBoard.receiveAttack([3, 2]);
-    gameBoard.receiveAttack([4, 2]);
-
-    gameBoard.receiveAttack([9, 4]);
-    gameBoard.receiveAttack([9, 5]);
-    gameBoard.receiveAttack([9, 6]);
+    destroyEntireShip(gameBoard, carrier, [0, 0], "horizontal");
+    destroyEntireShip(gameBoard, battleship, [0, 1], "horizontal");
+    destroyEntireShip(gameBoard, destroyer, [5, 5], "vertical");
+    destroyEntireShip(gameBoard, submarine, [2, 2], "horizontal");
+    destroyEntireShip(gameBoard, cruiser, [9, 4], "vertical");
 
     expect(gameBoard.isGameOver()).toBe(true);
   });

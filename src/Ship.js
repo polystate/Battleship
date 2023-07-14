@@ -15,29 +15,21 @@ const Ship = (name) => {
   const shipInfo = {
     name: name,
     length: length,
+    thisPartHit: false,
     locations: [],
     getSurroundings() {
-      let surroundings = [];
-      for (let [x, y] of this.locations) {
-        surroundings.push([x - 1, y]);
-        surroundings.push([x + 1, y]);
-        surroundings.push([x, y - 1]);
-        surroundings.push([x, y + 1]);
-        surroundings.push([x - 1, y - 1]);
-        surroundings.push([x + 1, y + 1]);
-        surroundings.push([x + 1, y - 1]);
-        surroundings.push([x - 1, y + 1]);
+      const surroundings = new Set();
+      for (const [x, y] of this.locations) {
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) {
+              continue;
+            }
+            surroundings.add([x + i, y + j]);
+          }
+        }
       }
-      surroundings = surroundings.filter((item1) => {
-        return !this.locations.some((item2) => {
-          return item1.every((value, index) => value === item2[index]);
-        });
-      });
-      surroundings = new Set(surroundings.map(JSON.stringify));
-      surroundings = Array.from(surroundings, JSON.parse);
-      console.log(surroundings);
-      console.log(surroundings.length);
-      return surroundings;
+      return Array.from(surroundings);
     },
   };
   const getHit = () => {
@@ -45,7 +37,7 @@ const Ship = (name) => {
       console.error(`Ship ${name} has already been sunk.`);
     } else {
       timesHit++;
-      console.log(`Ship ${name} has been hit ${timesHit} times.`);
+      logInfo().thisPartHit = true;
     }
   };
   const logInfo = () => shipInfo;

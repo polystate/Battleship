@@ -6,42 +6,60 @@ const Gameboard = () => {
       hits: shipPartsHit,
     };
   };
-  const isValidCoordinate = (x, y) => {
-    return x >= 0 && x <= 9 && y >= 0 && y <= 9;
+  const outOfBounds = (x, y) => {
+    return x < 0 || x > 9 || y < 0 || y > 9;
   };
-  const selectOrigin = (ship, coordinate) => {
-    const [x, y] = coordinate;
-    if (!isValidCoordinate(x, y) || grid[x][y] !== false) return;
+  const invalidCoordinate = (x, y) => {
+    return outOfBounds(x, y) || grid[x][y];
+  };
+  const selectOrigin = (ship, [x, y]) => {
+    if (invalidCoordinate(x, y)) return;
     grid[x][y] = ship;
     return [x, y];
   };
+  // const isTailValid = (coordinate, direction, tailLength) => {
+  //   const [x, y] = coordinate;
+  //   for (let i = 1; i <= tailLength; i++) {
+  //     direction === "vertical" ? (y += i) : (x += i);
+  //     if (invalidCoordinate(x, y)) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
   const placeShip = (ship, coordinate, direction) => {
+    // get origin check if it's valid
     const origin = selectOrigin(ship, coordinate);
     if (!origin) return;
+
+    //get origin and tail number
     const [x, y] = origin;
     const tail = ship.logInfo().length - 1;
 
+    //loop through tail number
     for (let i = 1; i <= tail; i++) {
+      //create clone x/y for tail
       let targetX = x;
       let targetY = y;
 
+      //increment targetX or targetY
       if (direction === "vertical") {
         targetY += i;
       } else if (direction === "horizontal") {
         targetX += i;
       }
 
-      if (
-        !isValidCoordinate(targetX, targetY) ||
-        grid[targetX][targetY] !== false
-      ) {
-        return; // Check for overlapping ships
+      //are tail targetX/targetY valid coordinates/do they go out of bounds
+      //or do they overlap with another ship, if so return undefined
+      if (invalidCoordinate(targetX, targetY)) {
+        return;
       }
     }
 
     //push origin to locations
     ship.logInfo().locations.push([x, y]);
 
+    //pushing the tail to locations
     for (let i = 1; i <= tail; i++) {
       if (direction === "vertical") {
         grid[x][y + i] = ship;

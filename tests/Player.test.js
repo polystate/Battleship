@@ -1,6 +1,22 @@
 import Player from "../src/Player.js";
 import { Ship } from "../src/Ship.js";
 
+//Helper Test Functions
+const generateTestArr = (x, y) => {
+  let testArr = [];
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      testArr.push([i, j]);
+    }
+  }
+  testArr.splice(
+    testArr.findIndex((coord) => coord[0] === x && coord[1] === y),
+    1
+  );
+  return testArr;
+};
+
+//Tests
 describe("Component: Initialize Players", () => {
   test("The Player factory should inherit all methods from the Gameboard factory", () => {
     const player = Player();
@@ -42,34 +58,24 @@ describe("Component: Gameplay", () => {
 });
 
 describe("Component: Computer Gameplay", () => {
-  test("The Player factory scanMoves() method should be able to scan for legal moves and return a 2D array of legal coordinates. [1. Missed Attacks/Repeated Moves. In this case, excluding 'null' coordinates]", () => {
+  test("The Player factory filterMoves() method should be able to scan for legal moves based on filtered value. [1. Null/Repeated Moves.]", () => {
     const computer = Player(true);
     const player = Player(false);
     computer.attackEnemy(player, [4, 5]);
     player.attackEnemy(computer, [0, 0]);
-    let testArr = [];
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        testArr.push([i, j]);
-      }
-    }
-    testArr.splice(
-      testArr.findIndex((coord) => coord[0] === 4 && coord[1] === 5),
-      1
-    );
-    expect(computer.scanMoves(player)).toEqual(testArr);
+    const testArr = generateTestArr(4, 5);
+    expect(computer.filterMoves(player, null)).toEqual(testArr);
   });
-  test("The Player factory scanMoves() method should be able to scan for legal moves and return a 2D array of legal coordinates. [2. In this case, excluding dead ship vessels.]", () => {
-    const computer = Player(true);
-    const player = Player(false);
-    player.placeShipHorizontal("Destroyer", [3, 3]);
-    computer.placeShipVertical("Destroyer", [3, 3]);
-    computer.attackEnemy(player, [4, 3]);
-    player.attackEnemy(computer, [3, 3]);
-  });
-  // test("The Player factory should be able to make a random move", () => {
+  // test("The Player factory scanMoves() method should be able to scan for legal moves and return a 2D array of legal coordinates. [2. In this case, excluding dead ship vessels.]", () => {
   //   const computer = Player(true);
   //   const player = Player(false);
-  //   computer.randomAttack(player);
+  //   const destroyer = Ship("Destroyer");
+  //   const carrier = Ship("Carrier");
+  //   player.placeShipHorizontal(destroyer, [3, 3]);
+  //   computer.placeShipVertical(carrier, [3, 3]);
+  //   computer.attackEnemy(player, [4, 3]);
+  //   player.attackEnemy(computer, [3, 3]);
+  //   const testArr = generateTestArr(4, 3);
+  //   expect(computer.filterMoves(player, )).toEqual(testArr);
   // });
 });

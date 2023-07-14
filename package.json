@@ -7,6 +7,7 @@
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:ship": "jest --testPathPattern=Ship.test.js",
     "test:player": "jest --testPathPattern=Player.test.js",
     "test:gameboard": "jest --testPathPattern=Gameboard.test.js"
@@ -19,7 +20,8 @@
     "babel-jest": "^29.6.1",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
-    "jest": "^25.0.0",
+    "jest": "^25.5.4",
+    "nodemon": "^3.0.1",
     "style-loader": "^3.3.3",
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
