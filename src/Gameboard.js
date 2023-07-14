@@ -10,64 +10,42 @@ const Gameboard = () => {
     return x < 0 || x > 9 || y < 0 || y > 9;
   };
   const invalidCoordinate = (x, y) => {
-    return outOfBounds(x, y) || grid[x][y];
+    return outOfBounds(x, y) || grid[x][y] !== false;
   };
   const selectOrigin = (ship, [x, y]) => {
     if (invalidCoordinate(x, y)) return;
     grid[x][y] = ship;
     return [x, y];
   };
-  // const isTailValid = (coordinate, direction, tailLength) => {
-  //   const [x, y] = coordinate;
-  //   for (let i = 1; i <= tailLength; i++) {
-  //     direction === "vertical" ? (y += i) : (x += i);
-  //     if (invalidCoordinate(x, y)) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // };
-  const placeShip = (ship, coordinate, direction) => {
-    // get origin check if it's valid
-    const origin = selectOrigin(ship, coordinate);
+  const isTailValid = (ship, coord, align) => {
+    const origin = selectOrigin(ship, coord);
     if (!origin) return;
-
-    //get origin and tail number
     const [x, y] = origin;
-    const tail = ship.logInfo().length - 1;
-
-    //loop through tail number
-    for (let i = 1; i <= tail; i++) {
-      //create clone x/y for tail
-      let targetX = x;
-      let targetY = y;
-
-      //increment targetX or targetY
-      if (direction === "vertical") {
-        targetY += i;
-      } else if (direction === "horizontal") {
-        targetX += i;
-      }
-
-      //are tail targetX/targetY valid coordinates/do they go out of bounds
-      //or do they overlap with another ship, if so return undefined
-      if (invalidCoordinate(targetX, targetY)) {
+    const tailLength = ship.logInfo().length - 1;
+    for (let i = 1; i <= tailLength; i++) {
+      let tailX = x;
+      let tailY = y;
+      align === "vertical" ? (tailY += i) : (tailX += i);
+      if (invalidCoordinate(tailX, tailY)) {
         return;
       }
     }
+    return true;
+  };
+  const placeShip = (ship, coord, align) => {
+    if (!isTailValid(ship, coord, align)) return;
 
-    //push origin to locations
+    const [x, y] = coord;
+    const tail = ship.logInfo().length - 1;
+
     ship.logInfo().locations.push([x, y]);
 
-    //pushing the tail to locations
     for (let i = 1; i <= tail; i++) {
-      if (direction === "vertical") {
+      if (align === "vertical") {
         grid[x][y + i] = ship;
-        //push tail to locations
         ship.logInfo().locations.push([x, y + i]);
-      } else if (direction === "horizontal") {
+      } else if (align === "horizontal") {
         grid[x + i][y] = ship;
-        //push tail to locations
         ship.logInfo().locations.push([x + i, y]);
       }
     }
@@ -101,6 +79,7 @@ const Gameboard = () => {
     grid,
     logBoardData,
     selectOrigin,
+    isTailValid,
     placeShip,
     placeShipVertical,
     placeShipHorizontal,

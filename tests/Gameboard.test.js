@@ -13,6 +13,17 @@ const destroyEntireShip = (board, ship, origin, alignment) => {
   }
 };
 
+const placeEntireShip = (board, ship, origin, alignment) => {
+  const [x, y] = origin;
+  for (let i = 0; i < ship.logInfo().length; i++) {
+    if (alignment === "vertical") {
+      board.grid[x][y + i] = ship;
+    } else {
+      board.grid[x + i][y] = ship;
+    }
+  }
+};
+
 //Tests
 describe("Component: Gameboard initialization", () => {
   test("When Gameboard is initialized, it should return the following properties: grid, selectOrigin, placeShipVertical, placeShipHorizontal, receiveAttack, isGameOver, and shipPartsHit", () => {
@@ -21,6 +32,7 @@ describe("Component: Gameboard initialization", () => {
       grid: expect.any(Object),
       logBoardData: expect.any(Function),
       selectOrigin: expect.any(Function),
+      isTailValid: expect.any(Function),
       placeShip: expect.any(Function),
       placeShipVertical: expect.any(Function),
       placeShipHorizontal: expect.any(Function),
@@ -66,6 +78,33 @@ describe("Component: selectOrigin", () => {
     const submarine = Ship("Submarine");
     gameBoard.selectOrigin(battleship, [5, 5]);
     expect(gameBoard.selectOrigin(submarine, [5, 5])).toBe(undefined);
+  });
+});
+
+describe("Component: isTailValid", () => {
+  test("After placing 'Carrier' at a high coordinate vertically, isTailValid() should return false", () => {
+    const gameBoard = Gameboard();
+    const carrier = Ship("Carrier");
+    expect(gameBoard.isTailValid(carrier, [6, 6], "vertical")).toBe(undefined);
+  });
+  test("Placing 'Carrier' at a lower coordinate should return true", () => {
+    const gameBoard = Gameboard();
+    const carrier = Ship("Carrier");
+    expect(gameBoard.isTailValid(carrier, [2, 2], "vertical")).toBe(true);
+  });
+  test("Placing 'Destroyer' (who only has a length of 2) at the edge horizontally should return true", () => {
+    const gameBoard = Gameboard();
+    const destroyer = Ship("Destroyer");
+    expect(gameBoard.isTailValid(destroyer, [8, 9], "horizontal")).toBe(true);
+  });
+  test("Placing two ships whose tails overlap should return false", () => {
+    const gameBoard = Gameboard();
+    const carrier = Ship("Carrier");
+    const battleship = Ship("Battleship");
+    placeEntireShip(gameBoard, carrier, [4, 4], "horizontal");
+    expect(gameBoard.isTailValid(battleship, [4, 1], "vertical")).toBe(
+      undefined
+    );
   });
 });
 
