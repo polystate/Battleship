@@ -82,7 +82,7 @@ describe("Component: selectOrigin", () => {
 });
 
 describe("Component: isTailValid", () => {
-  test("After placing 'Carrier' at a high coordinate vertically, isTailValid() should return false", () => {
+  test("After placing 'Carrier' at a high coordinate vertically, isTailValid() should return undefined", () => {
     const gameBoard = Gameboard();
     const carrier = Ship("Carrier");
     expect(gameBoard.isTailValid(carrier, [6, 6], "vertical")).toBe(undefined);
@@ -97,7 +97,7 @@ describe("Component: isTailValid", () => {
     const destroyer = Ship("Destroyer");
     expect(gameBoard.isTailValid(destroyer, [8, 9], "horizontal")).toBe(true);
   });
-  test("Placing two ships whose tails overlap should return false", () => {
+  test("Placing two ships whose tails overlap should return undefined", () => {
     const gameBoard = Gameboard();
     const carrier = Ship("Carrier");
     const battleship = Ship("Battleship");

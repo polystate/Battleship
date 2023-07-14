@@ -32,14 +32,8 @@ const Gameboard = () => {
     }
     return true;
   };
-  const placeShip = (ship, coord, align) => {
-    if (!isTailValid(ship, coord, align)) return;
-
+  const appendTail = (ship, coord, align, tail) => {
     const [x, y] = coord;
-    const tail = ship.logInfo().length - 1;
-
-    ship.logInfo().locations.push([x, y]);
-
     for (let i = 1; i <= tail; i++) {
       if (align === "vertical") {
         grid[x][y + i] = ship;
@@ -49,24 +43,29 @@ const Gameboard = () => {
         ship.logInfo().locations.push([x + i, y]);
       }
     }
+  };
+  const placeShip = (ship, coord, align) => {
+    if (!isTailValid(ship, coord, align)) return;
+    const [x, y] = coord;
+    const tail = ship.logInfo().length - 1;
+    ship.logInfo().locations.push([x, y]);
+    appendTail(ship, coord, align, tail);
     return true;
   };
-
-  const placeShipVertical = (ship, coordinate) => {
-    placeShip(ship, coordinate, "vertical");
+  const placeShipVertical = (ship, coord) => {
+    placeShip(ship, coord, "vertical");
   };
-  const placeShipHorizontal = (ship, coordinate) => {
-    placeShip(ship, coordinate, "horizontal");
+  const placeShipHorizontal = (ship, coord) => {
+    placeShip(ship, coord, "horizontal");
   };
-  const receiveAttack = (coordinate) => {
-    const [x, y] = coordinate;
+  const receiveAttack = (coord) => {
+    const [x, y] = coord;
     if (!grid[x][y]) {
-      grid[x][y] = null; //mark square as missed or null
-      return; //it's an empty square
+      grid[x][y] = null;
+      return;
     }
     if (typeof grid[x][y] === "object") {
-      // then it's a ship part
-      if (grid[x][y].isSunk()) return; //dead ship, skip
+      if (grid[x][y].isSunk()) return;
       grid[x][y].getHit();
       shipPartsHit++;
       return true;

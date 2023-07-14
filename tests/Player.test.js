@@ -58,14 +58,33 @@ describe("Component: Gameplay", () => {
 });
 
 describe("Component: Computer Gameplay", () => {
-  test("The Player factory filterMoves() method should be able to scan for legal moves based on filtered value. [1. Null/Repeated Moves.]", () => {
+  test("The Player factory should keep track of all of its attempted shots", () => {
     const computer = Player(true);
     const player = Player(false);
-    computer.attackEnemy(player, [4, 5]);
-    player.attackEnemy(computer, [0, 0]);
-    const testArr = generateTestArr(4, 5);
-    expect(computer.filterMoves(player, null)).toEqual(testArr);
+    computer.attackEnemy(player, [5, 9]);
+    player.attackEnemy(computer, [5, 9]);
+    computer.attackEnemy(player, [6, 9]);
+    expect(computer.getAttempts()).toEqual([
+      [5, 9],
+      [6, 9],
+    ]);
   });
+  test("The Player factory should filter out its attempted shots", () => {
+    const computer = Player(true);
+    const player = Player(false);
+    computer.attackEnemy(player, [7, 5]);
+    player.attackEnemy(computer, [3, 2]);
+    const testArr = generateTestArr(7, 5);
+    expect(computer.filterMoves()).toEqual(expect.arrayContaining(testArr));
+  });
+  // test("The Player factory filterMoves() method should be able to scan for legal moves based on filtered value. [1. Null/Repeated Moves.]", () => {
+  //   const computer = Player(true);
+  //   const player = Player(false);
+  //   computer.attackEnemy(player, [4, 5]);
+  //   player.attackEnemy(computer, [0, 0]);
+  //   const testArr = generateTestArr(4, 5);
+  //   expect(computer.filterMoves(player, null)).toEqual(testArr);
+  // });
   // test("The Player factory scanMoves() method should be able to scan for legal moves and return a 2D array of legal coordinates. [2. In this case, excluding dead ship vessels.]", () => {
   //   const computer = Player(true);
   //   const player = Player(false);
@@ -76,6 +95,7 @@ describe("Component: Computer Gameplay", () => {
   //   computer.attackEnemy(player, [4, 3]);
   //   player.attackEnemy(computer, [3, 3]);
   //   const testArr = generateTestArr(4, 3);
-  //   expect(computer.filterMoves(player, )).toEqual(testArr);
+  //   console.log(player.grid);
+  //   expect(computer.filterMoves(player)).toEqual(testArr);
   // });
 });
