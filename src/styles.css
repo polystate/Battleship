@@ -41,7 +41,7 @@ body {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
 }
   
-  .grid-cell {
+.grid-cell {
     /* flex-basis: calc(10% - 8px);  */
     height: 2rem;
     /* padding-bottom: calc(10% - 8px); */
@@ -52,6 +52,14 @@ body {
 .grid-cell:hover {
   background-color: rgba(var(--complementary), 0.25);
   cursor: pointer;
+}
+
+.ship{
+  background: rgb(var(--complementary));
+}
+
+.enemy-ship{
+  background: red;
 }
 
 

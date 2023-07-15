@@ -110,3 +110,20 @@ describe("Component: Computer Gameplay", () => {
   //   expect(computer.filterMoves(player)).toEqual(testArr);
   // });
 });
+
+describe("[***generateRandomShips***]", () => {
+  test("Select a random coordinate from 0 to 9", () => {
+    const player = Player();
+    const randomCoordinate = player.selectRandCoord();
+    expect(randomCoordinate).toBeDefined();
+    expect(randomCoordinate[0]).toBeGreaterThanOrEqual(0);
+    expect(randomCoordinate[0]).toBeLessThan(10);
+    expect(randomCoordinate[1]).toBeGreaterThanOrEqual(0);
+    expect(randomCoordinate[1]).toBeLessThan(10);
+  });
+  // test("Selecting a random coordinate where a ship is already occupied should return undefined", () => {
+  //   const player = Player();
+  //   const battleship = Ship("Battleship");
+  //   player.placeShipHorizontal(battleship, [4, 4]);
+  // });
+});

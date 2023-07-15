@@ -1,3 +1,5 @@
+import { shipChoices } from "./Ship.js";
+
 const Gameboard = () => {
   const grid = Array.from({ length: 10 }, () => Array(10).fill(false));
   let shipPartsHit = 0;
@@ -71,6 +73,7 @@ const Gameboard = () => {
       return true;
     }
   };
+
   const isGameOver = () => {
     return logBoardData().hits == 17 ? true : false;
   };

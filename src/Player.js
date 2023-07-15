@@ -1,4 +1,5 @@
 import Gameboard from "./Gameboard.js";
+import { Ship } from "./Ship.js";
 
 const generateAllCoords = () => {
   let testArr = [];
@@ -38,13 +39,18 @@ const Player = (turnBoolean = true) => {
         return shot[0] === coord[0] && shot[1] === coord[1];
       });
     });
-    player.randomAttack = () => {
-      const validMoves = player.filterMoves();
-      const randomIndex = Math.floor(Math.random() * validMoves.length);
-      return validMoves[randomIndex];
-    };
 
     return validMoves;
+  };
+  player.randomAttack = () => {
+    const validMoves = player.filterMoves();
+    const randomIndex = Math.floor(Math.random() * validMoves.length);
+    return validMoves[randomIndex];
+  };
+  player.selectRandCoord = () => {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    return [x, y];
   };
 
   return player;
