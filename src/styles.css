@@ -1,3 +1,58 @@
-body{
-    background-color: black;
+:root{
+  --background: #333333;
+  --grid-bg: #222222;
+  --complementary: 255, 140, 0;
+  --border-col: #555555;
+  --ship-found: whitesmoke;
+  --grid-size: 10;
+  --grid-cell-size: 10%;
 }
+
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+  
+.grid-container {
+    display: flex;
+    height: 40vh; 
+    gap: var(--grid-cell-size);
+    width: 75%;
+}
+  
+.grid {
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(10, 1fr);
+    width: 75%;
+    max-width: 65%; 
+    background-color: var(--grid-bg); 
+    border: 1px solid var(--border-col); 
+    border-bottom: 4px solid black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+}
+  
+  .grid-cell {
+    /* flex-basis: calc(10% - 8px);  */
+    height: 2rem;
+    /* padding-bottom: calc(10% - 8px); */
+    background-color: var(--grid-bg); 
+    border: 1px solid var(--border-col); 
+}
+
+.grid-cell:hover {
+  background-color: rgba(var(--complementary), 0.25);
+  cursor: pointer;
+}
+
+
+  

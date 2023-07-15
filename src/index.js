@@ -1,3 +1,7 @@
 import "./styles.css";
+import gameLoop from "./Loop.js";
+import { initializeDOM, handleUserInput } from "./DOM.js";
 
-console.log("test");
+initializeDOM();
+handleUserInput();
+gameLoop();
