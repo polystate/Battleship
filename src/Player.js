@@ -52,6 +52,25 @@ const Player = (turnBoolean = true) => {
     const y = Math.floor(Math.random() * 10);
     return [x, y];
   };
+  player.placeAllHorizontal = (ship, coord) => {
+    const [x, y] = coord;
+    for (let i = 0; i < ship.logInfo().length; i++) {
+      player.placeShipHorizontal(ship, [x + i, y]);
+    }
+  };
+  player.placeAllVertical = (ship, coord) => {
+    const [x, y] = coord;
+    for (let i = 0; i < ship.logInfo().length; i++) {
+      player.placeShipVertical(ship, [x, y + i]);
+    }
+  };
+  player.placeShipRandom = (ship) => {
+    const randCoord = player.selectRandCoord();
+    const align =
+      Math.random() < 0.5 ? player.placeAllHorizontal : player.placeAllVertical;
+    const result = align(ship, randCoord);
+    return result;
+  };
 
   return player;
 };

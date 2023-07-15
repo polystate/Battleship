@@ -88,27 +88,6 @@ describe("Component: Computer Gameplay", () => {
     const randomAttack = computer.randomAttack();
     expect(validMoves).toContainEqual(randomAttack);
   });
-  // test("The Player factory filterMoves() method should be able to scan for legal moves based on filtered value. [1. Null/Repeated Moves.]", () => {
-  //   const computer = Player(true);
-  //   const player = Player(false);
-  //   computer.attackEnemy(player, [4, 5]);
-  //   player.attackEnemy(computer, [0, 0]);
-  //   const testArr = generateTestArr(4, 5);
-  //   expect(computer.filterMoves(player, null)).toEqual(testArr);
-  // });
-  // test("The Player factory scanMoves() method should be able to scan for legal moves and return a 2D array of legal coordinates. [2. In this case, excluding dead ship vessels.]", () => {
-  //   const computer = Player(true);
-  //   const player = Player(false);
-  //   const destroyer = Ship("Destroyer");
-  //   const carrier = Ship("Carrier");
-  //   player.placeShipHorizontal(destroyer, [3, 3]);
-  //   computer.placeShipVertical(carrier, [3, 3]);
-  //   computer.attackEnemy(player, [4, 3]);
-  //   player.attackEnemy(computer, [3, 3]);
-  //   const testArr = generateTestArr(4, 3);
-  //   console.log(player.grid);
-  //   expect(computer.filterMoves(player)).toEqual(testArr);
-  // });
 });
 
 describe("[***generateRandomShips***]", () => {
@@ -121,9 +100,26 @@ describe("[***generateRandomShips***]", () => {
     expect(randomCoordinate[1]).toBeGreaterThanOrEqual(0);
     expect(randomCoordinate[1]).toBeLessThan(10);
   });
-  // test("Selecting a random coordinate where a ship is already occupied should return undefined", () => {
-  //   const player = Player();
-  //   const battleship = Ship("Battleship");
-  //   player.placeShipHorizontal(battleship, [4, 4]);
-  // });
+  test("placeAllHorizontal/placeAllVertical should place an entire ship on the grid", () => {
+    const player = Player();
+    const computer = Player();
+    const destroyer = Ship("Destroyer");
+    const submarine = Ship("Submarine");
+    player.grid[0][0] = destroyer;
+    player.grid[1][0] = destroyer;
+    player.grid[4][4] = submarine;
+    player.grid[4][5] = submarine;
+    player.grid[4][6] = submarine;
+    computer.placeAllHorizontal(destroyer, [0, 0]);
+    computer.placeAllVertical(submarine, [4, 4]);
+    expect(computer.grid).toMatchObject(player.grid);
+  });
+  test("placeShipRandom should select a random coordinate and place an entire ship (*all of its parts*) on the grid", () => {
+    const player = Player();
+    const carrier = Ship("Carrier");
+    player.placeShipRandom(carrier);
+    for (const [x, y] of carrier.logInfo().locations) {
+      expect(player.grid[x][y]).toBe(carrier);
+    }
+  });
 });
