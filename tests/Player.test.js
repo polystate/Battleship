@@ -1,5 +1,5 @@
-import Player from "../src/Player.js";
-import { Ship, shipChoices } from "../src/Ship.js";
+import Player from "../src/Functionality/Player.js";
+import { Ship, shipChoices } from "../src/Functionality/Ship.js";
 
 //Helper Test Functions
 const generateTestArr = (x, y) => {

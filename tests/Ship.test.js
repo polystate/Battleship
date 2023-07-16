@@ -1,4 +1,4 @@
-import { Ship, shipChoices } from "../src/Ship.js";
+import { Ship, shipChoices } from "../src/Functionality/Ship.js";
 
 describe("Component: Ship Creation", () => {
   test("Ship constructor accepts valid ship name choices and doesn't throw an error", () => {

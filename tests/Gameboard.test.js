@@ -1,5 +1,5 @@
-import Gameboard from "../src/Gameboard.js";
-import { Ship } from "../src/Ship.js";
+import Gameboard from "../src/Functionality/Gameboard.js";
+import { Ship } from "../src/Functionality/Ship.js";
 
 //Helper Methods
 const destroyEntireShip = (board, ship, origin, alignment) => {
