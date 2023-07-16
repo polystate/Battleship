@@ -58,6 +58,19 @@ describe("[***Gameboard Module***]", () => {
     });
   });
 
+  describe("[***isTouching Method***]", () => {
+    test("Checks if a coordinate is surrounded by any ships, if so, return true, otherwise return false", () => {
+      gameBoard.placeShipHorizontal(destroyer, [4, 4]);
+      expect(gameBoard.isTouching(3, 4)).toBe(true);
+      expect(gameBoard.isTouching(4, 5)).toBe(true);
+      expect(gameBoard.isTouching(5, 5)).toBe(true);
+      expect(gameBoard.isTouching(3, 3)).toBe(true);
+      expect(gameBoard.isTouching(0, 0)).toBe(false);
+      expect(gameBoard.isTouching(2, 2)).toBe(false);
+      expect(gameBoard.isTouching(4, 3)).toBe(true);
+    });
+  });
+
   describe("[***isTailValid Method***]", () => {
     test("After placing 'Carrier' at a high coordinate vertically, isTailValid() should return undefined", () => {
       expect(gameBoard.isTailValid(carrier, [6, 6], "vertical")).toBe(
@@ -173,7 +186,7 @@ describe("[***Gameboard Module***]", () => {
         }
       }
     });
-    test("Grid should be all false values except for Carrier after two ships interlap with it", () => {
+    test("Grid should be all false values except for Carrier after several ships overlap with it", () => {
       gameBoard.placeShipHorizontal(carrier, [4, 4]);
       gameBoard.placeShipVertical(destroyer, [4, 3]);
       gameBoard.placeShipHorizontal(carrier, [0, 4]);
@@ -230,14 +243,14 @@ describe("[***Gameboard Module***]", () => {
   describe("[***Game Over. Simulates an entire game of Battleship***]", () => {
     test("Gameboards should be able to report whether or not all their ships have been sunk", () => {
       gameBoard.placeShipHorizontal(carrier, [0, 0]);
-      gameBoard.placeShipHorizontal(battleship, [0, 1]);
+      gameBoard.placeShipHorizontal(battleship, [0, 2]);
       gameBoard.placeShipVertical(destroyer, [5, 5]);
-      gameBoard.placeShipHorizontal(submarine, [2, 2]);
+      gameBoard.placeShipHorizontal(submarine, [0, 4]);
       gameBoard.placeShipVertical(cruiser, [9, 4]);
       destroyEntireShip(gameBoard, carrier, [0, 0], "horizontal");
-      destroyEntireShip(gameBoard, battleship, [0, 1], "horizontal");
+      destroyEntireShip(gameBoard, battleship, [0, 2], "horizontal");
       destroyEntireShip(gameBoard, destroyer, [5, 5], "vertical");
-      destroyEntireShip(gameBoard, submarine, [2, 2], "horizontal");
+      destroyEntireShip(gameBoard, submarine, [0, 4], "horizontal");
       destroyEntireShip(gameBoard, cruiser, [9, 4], "vertical");
 
       expect(gameBoard.isGameOver()).toBe(true);

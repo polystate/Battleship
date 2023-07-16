@@ -114,7 +114,7 @@ describe("[***generateRandomShips***]", () => {
     computer.placeAllVertical(submarine, [4, 4]);
     expect(computer.grid).toMatchObject(player.grid);
   });
-  test("Placing an entire ship on the grid that goes out of bounds should return undefined. Note: As of now, only individual parts get returned undefined, we don't want it to place partial of a ship or 2/3 of a ship on the grid because that won't result in an error. If it does return undefined it should also clear the ship parts that it already placed on the grid.", () => {
+  test("Placing an entire ship on the grid that goes out of bounds should return undefined.", () => {
     const player = Player();
     const carrier = Ship("Carrier");
     player.placeShipVertical(carrier, [3, 7]);

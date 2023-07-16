@@ -14,8 +14,23 @@ const Gameboard = () => {
   const invalidCoordinate = (x, y) => {
     return outOfBounds(x, y) || grid[x][y] !== false;
   };
+  const isTouching = (x, y) => {
+    const neighbors = [
+      [x - 1, y],
+      [x + 1, y],
+      [x, y - 1],
+      [x, y + 1],
+      [x + 1, y + 1],
+      [x - 1, y - 1],
+    ];
+
+    return neighbors.some(([nx, ny]) => {
+      return !outOfBounds(nx, ny) && typeof grid[nx][ny] === "object";
+    });
+  };
   const isTailValid = (ship, coord, align) => {
-    if (invalidCoordinate(coord[0], coord[1])) return;
+    if (invalidCoordinate(coord[0], coord[1]) || isTouching(coord[0], coord[1]))
+      return;
     const [x, y] = coord;
     const tailLength = ship.logInfo().length - 1;
     for (let i = 1; i <= tailLength; i++) {
@@ -45,7 +60,7 @@ const Gameboard = () => {
     const [x, y] = coord;
     grid[x][y] = ship;
     const tail = ship.logInfo().length - 1;
-    ship.logInfo().locations.push([x, y]);
+    ship.logInfo().locations.push([x, y]); //push origin
     appendTail(ship, coord, align, tail);
     return true;
   };
@@ -76,6 +91,7 @@ const Gameboard = () => {
     grid,
     logBoardData,
     isTailValid,
+    isTouching,
     placeShip,
     placeShipVertical,
     placeShipHorizontal,
