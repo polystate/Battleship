@@ -54,6 +54,10 @@ body {
   cursor: pointer;
 }
 
+.highlight{
+  background: white;
+}
+
 .ship{
   background: rgb(var(--complementary));
   

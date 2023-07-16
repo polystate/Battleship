@@ -65,10 +65,12 @@ const Gameboard = () => {
     return true;
   };
   const placeShipVertical = (ship, coord) => {
-    placeShip(ship, coord, "vertical");
+    if (placeShip(ship, coord, "vertical")) return true;
+    return false;
   };
   const placeShipHorizontal = (ship, coord) => {
-    placeShip(ship, coord, "horizontal");
+    if (placeShip(ship, coord, "horizontal")) return true;
+    return false;
   };
   const receiveAttack = (coord) => {
     const [x, y] = coord;

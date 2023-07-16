@@ -100,21 +100,7 @@ describe("[***generateRandomShips***]", () => {
     expect(randomCoordinate[1]).toBeGreaterThanOrEqual(0);
     expect(randomCoordinate[1]).toBeLessThan(10);
   });
-  test("placeAllHorizontal/placeAllVertical should place an entire ship on the grid", () => {
-    const player = Player();
-    const computer = Player();
-    const destroyer = Ship("Destroyer");
-    const submarine = Ship("Submarine");
-    player.grid[0][0] = destroyer;
-    player.grid[1][0] = destroyer;
-    player.grid[4][4] = submarine;
-    player.grid[4][5] = submarine;
-    player.grid[4][6] = submarine;
-    computer.placeAllHorizontal(destroyer, [0, 0]);
-    computer.placeAllVertical(submarine, [4, 4]);
-    expect(computer.grid).toMatchObject(player.grid);
-  });
-  test("Placing an entire ship on the grid that goes out of bounds should return undefined.", () => {
+  test("Placing a ship on the grid that goes out of bounds should return undefined.", () => {
     const player = Player();
     const carrier = Ship("Carrier");
     player.placeShipVertical(carrier, [3, 7]);
@@ -125,7 +111,7 @@ describe("[***generateRandomShips***]", () => {
       }
     }
   });
-  test("placeShipRandom should select a random coordinate and place an entire ship (*all of its parts*) on the grid", () => {
+  test("placeShipRandom should select a random coordinate and place ship on the grid", () => {
     const player = Player();
     const carrier = Ship("Carrier");
     player.placeShipRandom(carrier);
@@ -133,9 +119,31 @@ describe("[***generateRandomShips***]", () => {
       expect(player.grid[x][y]).toBe(carrier);
     }
   });
-  // test("placeFleetRandom takes in the shipChoices object and places all of the ships at random locations", () => {
-  //   const player = Player();
-  //   player.placeFleetRandom(shipChoices);
+  test("placeFleetRandom takes in the shipChoices object and places all of the ships at random locations", () => {
+    const player = Player();
+    player.placeFleetRandom();
+    // console.log(player.grid);
+    // Assert that all ships have been placed on the grid
+    for (const shipName in shipChoices) {
+      const shipLength = shipChoices[shipName];
+      const ship = Ship(shipName);
 
-  // });
+      let totalShipParts = 0;
+
+      // Iterate over the grid and count the ship parts
+      for (let row = 0; row < player.grid.length; row++) {
+        for (let col = 0; col < player.grid[row].length; col++) {
+          if (typeof player.grid[row][col] === "object") {
+            totalShipParts++;
+          }
+        }
+      }
+      // console.log(totalShipParts);
+
+      // Iterate over each ship part and check if it exists in the grid
+      for (const [x, y] of ship.logInfo().locations) {
+        expect(player.grid[x][y]).toBe(ship);
+      }
+    }
+  });
 });

@@ -1,79 +1,38 @@
-import { updateDOM, displayShips } from "./DOM.js";
+import { updateDOM, displayShips, handleUserInput } from "./DOM.js";
 import Player from "./Player.js";
 import { Ship, shipChoices } from "./Ship.js";
-
-const player = Player(true);
-const computer = Player(false);
 
 const gameLoop = () => {
   const shipPositions = generateShips();
   displayShips(shipPositions);
-  updateGameState();
-  renderGame();
-  // updateDOM(player.grid, computer.grid);
   requestAnimationFrame(gameLoop);
   if (isGameOver()) {
-    endGame();
     return;
   }
 };
 
-const updateGameState = () => {};
-
-const renderGame = () => {
-  // Render the game state to the DOM
-};
-
-const isGameOver = () => {
-  // Check if the game is over based on the rules of your game
-};
-
-const endGame = () => {
-  // Perform necessary actions when the game is over
-};
+const isGameOver = () => {};
 
 const generateShips = () => {
-  const shipPositions = [
-    {
-      coordinates: [
-        [0, 0],
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [0, 4],
-      ],
-    }, // Carrier
-    {
-      coordinates: [
-        [2, 5],
-        [3, 5],
-        [4, 5],
-        [5, 5],
-      ],
-    }, // Battleship
-    {
-      coordinates: [
-        [7, 2],
-        [7, 3],
-        [7, 4],
-      ],
-    }, // Cruiser
-    {
-      coordinates: [
-        [9, 1],
-        [9, 2],
-        [9, 3],
-      ],
-    }, // Submarine
-    {
-      coordinates: [
-        [6, 8],
-        [7, 8],
-      ],
-    }, // Destroyer
-  ];
+  const player = Player();
+  player.placeFleetRandom();
+
+  const shipPositions = Object.values(shipChoices).map((length) => {
+    const coordinates = [];
+    for (let row = 0; row < player.grid.length; row++) {
+      for (let col = 0; col < player.grid[row].length; col++) {
+        if (
+          player.grid[row][col] &&
+          player.grid[row][col].logInfo().length === length
+        ) {
+          coordinates.push([row, col]);
+        }
+      }
+    }
+    return { coordinates };
+  });
 
   return shipPositions;
 };
 
-export default gameLoop;
+export { gameLoop, generateShips };

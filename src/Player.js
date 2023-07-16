@@ -1,5 +1,5 @@
 import Gameboard from "./Gameboard.js";
-import { Ship } from "./Ship.js";
+import { Ship, shipChoices } from "./Ship.js";
 
 const generateAllCoords = () => {
   let testArr = [];
@@ -52,26 +52,32 @@ const Player = (turnBoolean = true) => {
     const y = Math.floor(Math.random() * 10);
     return [x, y];
   };
-  player.placeAllHorizontal = (ship, coord) => {
-    const [x, y] = coord;
-    for (let i = 0; i < ship.logInfo().length; i++) {
-      player.placeShipHorizontal(ship, [x + i, y]);
-    }
-  };
-  player.placeAllVertical = (ship, coord) => {
-    const [x, y] = coord;
-    for (let i = 0; i < ship.logInfo().length; i++) {
-      player.placeShipVertical(ship, [x, y + i]);
-    }
-  };
   player.placeShipRandom = (ship) => {
     const randCoord = player.selectRandCoord();
     const align =
-      Math.random() < 0.5 ? player.placeAllHorizontal : player.placeAllVertical;
+      Math.random() < 0.5
+        ? player.placeShipHorizontal
+        : player.placeShipVertical;
     const result = align(ship, randCoord);
-    return result;
+    if (!result) return false;
+    return true;
+  };
+  player.resetGrid = () => {
+    player.grid = Array.from({ length: 10 }, () => Array(10).fill(false));
   };
 
+  player.placeFleetRandom = () => {
+    let isPlaced = false;
+    for (let shipName in shipChoices) {
+      let ship = Ship(shipName);
+      isPlaced = false;
+      while (!isPlaced) {
+        if (player.placeShipRandom(ship)) {
+          isPlaced = true;
+        }
+      }
+    }
+  };
   return player;
 };
 

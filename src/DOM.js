@@ -1,5 +1,9 @@
+import { generateShips } from "./Loop";
+
 const initializeDOM = () => {
+  //Initial drawings that users will see only
   generateGrid();
+  displayShips(generateShips());
 };
 
 const generateGrid = () => {
@@ -35,11 +39,34 @@ const displayShips = (shipArr) => {
   });
 };
 
-const handleUserInput = () => {
+const handleUserInput = (shipArr) => {
   const cells = document.querySelectorAll(".grid-cell");
   cells.forEach((cell) => {
     cell.addEventListener("click", (event) => {
       const cellId = event.target.id;
+      const [row, col] = cellId.split(",");
+
+      // Check if the clicked cell represents a ship
+      const isShipCell = shipArr.some((ship) => {
+        return ship.coordinates.some(([shipRow, shipCol]) => {
+          return shipRow === Number(row) && shipCol === Number(col);
+        });
+      });
+
+      if (isShipCell) {
+        // Find the ship object that corresponds to the clicked cell
+        const clickedShip = shipArr.find((ship) => {
+          return ship.coordinates.some(([shipRow, shipCol]) => {
+            return shipRow === Number(row) && shipCol === Number(col);
+          });
+        });
+
+        // Highlight all cells of the ship
+        clickedShip.coordinates.forEach(([shipRow, shipCol]) => {
+          const shipCell = document.getElementById(`${shipRow},${shipCol}`);
+          shipCell.classList.add("highlight");
+        });
+      }
     });
   });
 };
