@@ -14,15 +14,9 @@ const Gameboard = () => {
   const invalidCoordinate = (x, y) => {
     return outOfBounds(x, y) || grid[x][y] !== false;
   };
-  const selectOrigin = (ship, [x, y]) => {
-    if (invalidCoordinate(x, y)) return;
-    grid[x][y] = ship;
-    return [x, y];
-  };
   const isTailValid = (ship, coord, align) => {
-    const origin = selectOrigin(ship, coord);
-    if (!origin) return;
-    const [x, y] = origin;
+    if (invalidCoordinate(coord[0], coord[1])) return;
+    const [x, y] = coord;
     const tailLength = ship.logInfo().length - 1;
     for (let i = 1; i <= tailLength; i++) {
       let tailX = x;
@@ -49,6 +43,7 @@ const Gameboard = () => {
   const placeShip = (ship, coord, align) => {
     if (!isTailValid(ship, coord, align)) return;
     const [x, y] = coord;
+    grid[x][y] = ship;
     const tail = ship.logInfo().length - 1;
     ship.logInfo().locations.push([x, y]);
     appendTail(ship, coord, align, tail);
@@ -80,7 +75,6 @@ const Gameboard = () => {
   return {
     grid,
     logBoardData,
-    selectOrigin,
     isTailValid,
     placeShip,
     placeShipVertical,

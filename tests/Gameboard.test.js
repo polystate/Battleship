@@ -43,20 +43,6 @@ describe("[***Gameboard Module***]", () => {
     destroyer = Ship("Destroyer");
   });
   describe("[***Initialization***]", () => {
-    test("When Gameboard is initialized, it should return the following properties: grid, selectOrigin, placeShipVertical, placeShipHorizontal, receiveAttack, isGameOver, and shipPartsHit", () => {
-      expect(gameBoard).toStrictEqual({
-        grid: expect.any(Object),
-        logBoardData: expect.any(Function),
-        selectOrigin: expect.any(Function),
-        isTailValid: expect.any(Function),
-        placeShip: expect.any(Function),
-        placeShipVertical: expect.any(Function),
-        placeShipHorizontal: expect.any(Function),
-        receiveAttack: expect.any(Function),
-        isGameOver: expect.any(Function),
-        shipPartsHit: expect.any(Number),
-      });
-    });
     test("Gameboard should initialize a shipPartsHit counter to 0", () => {
       expect(gameBoard.shipPartsHit).toBe(0);
     });
@@ -69,21 +55,6 @@ describe("[***Gameboard Module***]", () => {
           return Array(10).fill(false);
         })
       );
-    });
-  });
-
-  describe("[***selectOrigin Method***]", () => {
-    test("Placing a ship's origin at a coordinate updates the grid variable with Ship object in proper location", () => {
-      gameBoard.selectOrigin(battleship, [0, 4]);
-      expect(gameBoard.grid[0][4]).toEqual(battleship);
-    });
-    test("Placing a ship's origin out of bounds should return undefined and break out of the function", () => {
-      expect(gameBoard.selectOrigin(submarine, [-1, 0])).toBe(undefined);
-      expect(gameBoard.selectOrigin(battleship, [0, 10])).toBe(undefined);
-    });
-    test("Placing a ship's origin on top of another ship should return undefined and break out of the function", () => {
-      gameBoard.selectOrigin(battleship, [5, 5]);
-      expect(gameBoard.selectOrigin(submarine, [5, 5])).toBe(undefined);
     });
   });
 
@@ -104,6 +75,13 @@ describe("[***Gameboard Module***]", () => {
       expect(gameBoard.isTailValid(battleship, [4, 1], "vertical")).toBe(
         undefined
       );
+    });
+    test("isTailValid should work properly with basic placement tests", () => {
+      expect(gameBoard.isTailValid(destroyer, [5, 5], "horizontal")).toBe(true);
+      expect(gameBoard.isTailValid(carrier, [7, 6], "vertical")).toBe(
+        undefined
+      );
+      expect(gameBoard.isTailValid(submarine, [7, 6], "vertical")).toBe(true);
     });
   });
 
@@ -172,8 +150,6 @@ describe("[***Gameboard Module***]", () => {
       expect(gameBoard.placeShip(destroyer, [0, 10], "horizontal")).toBe(
         undefined
       );
-
-      // Verify that the grid remains unchanged
       expect(gameBoard.grid).toStrictEqual(initialGrid);
     });
 
@@ -185,6 +161,28 @@ describe("[***Gameboard Module***]", () => {
       expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
       expect(gameBoard.grid[0][0]).toStrictEqual(destroyer);
       expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
+    });
+  });
+
+  describe("placeShipHorizontal and placeShipVertical", () => {
+    test("Grid should still be all false values when tail goes out of bounds and no previous ship parts should be placed", () => {
+      gameBoard.placeShipVertical(carrier, [7, 7]);
+      for (let i = 0; i < gameBoard.grid.length; i++) {
+        for (let j = 0; j < gameBoard.grid[i].length; j++) {
+          expect(gameBoard.grid[i][j]).toBe(false);
+        }
+      }
+    });
+    test("Grid should be all false values except for Carrier after two ships interlap with it", () => {
+      gameBoard.placeShipHorizontal(carrier, [4, 4]);
+      gameBoard.placeShipVertical(destroyer, [4, 3]);
+      gameBoard.placeShipHorizontal(carrier, [0, 4]);
+      gameBoard.placeShipVertical(battleship, [2, 7]);
+      gameBoard.placeShipHorizontal(battleship, [1, 4]);
+      const numShips = gameBoard.grid.reduce((count, row) => {
+        return count + row.filter((cell) => cell !== false).length;
+      }, 0);
+      expect(numShips).toBe(5);
     });
   });
 

@@ -1,5 +1,5 @@
 import Player from "../src/Player.js";
-import { Ship } from "../src/Ship.js";
+import { Ship, shipChoices } from "../src/Ship.js";
 
 //Helper Test Functions
 const generateTestArr = (x, y) => {
@@ -114,6 +114,17 @@ describe("[***generateRandomShips***]", () => {
     computer.placeAllVertical(submarine, [4, 4]);
     expect(computer.grid).toMatchObject(player.grid);
   });
+  test("Placing an entire ship on the grid that goes out of bounds should return undefined. Note: As of now, only individual parts get returned undefined, we don't want it to place partial of a ship or 2/3 of a ship on the grid because that won't result in an error. If it does return undefined it should also clear the ship parts that it already placed on the grid.", () => {
+    const player = Player();
+    const carrier = Ship("Carrier");
+    player.placeShipVertical(carrier, [3, 7]);
+    console.log(player.grid);
+    for (let row = 0; row < player.grid.length; row++) {
+      for (let col = 0; col < player.grid[row].length; col++) {
+        expect(player.grid[row][col]).toBe(false);
+      }
+    }
+  });
   test("placeShipRandom should select a random coordinate and place an entire ship (*all of its parts*) on the grid", () => {
     const player = Player();
     const carrier = Ship("Carrier");
@@ -122,4 +133,9 @@ describe("[***generateRandomShips***]", () => {
       expect(player.grid[x][y]).toBe(carrier);
     }
   });
+  // test("placeFleetRandom takes in the shipChoices object and places all of the ships at random locations", () => {
+  //   const player = Player();
+  //   player.placeFleetRandom(shipChoices);
+
+  // });
 });
