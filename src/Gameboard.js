@@ -22,6 +22,8 @@ const Gameboard = () => {
       [x, y + 1],
       [x + 1, y + 1],
       [x - 1, y - 1],
+      [x + 1, y - 1],
+      [x - 1, y + 1],
     ];
 
     return neighbors.some(([nx, ny]) => {
@@ -37,7 +39,7 @@ const Gameboard = () => {
       let tailX = x;
       let tailY = y;
       align === "vertical" ? (tailY += i) : (tailX += i);
-      if (invalidCoordinate(tailX, tailY)) {
+      if (invalidCoordinate(tailX, tailY) || isTouching(tailX, tailY)) {
         return;
       }
     }

@@ -81,4 +81,6 @@ const Player = (turnBoolean = true) => {
   return player;
 };
 
+//add an additional check to placeFleetRandom and use the power of each ship to get all of its surrounding squares, check to make sure none of the surroundings squares are an object, end of story. fuck all of testing bullshit and fuck this waste of time project.
+
 export default Player;
