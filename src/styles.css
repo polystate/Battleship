@@ -55,7 +55,10 @@ body {
 }
 
 .highlight{
-  background: white;
+  background-color: rgba(var(--complementary), 0.50);
+  border: 1px solid var(--grid-bg);
+  /* border-radius: 5rem;
+  background: whitesmoke; */
 }
 
 .ship{
