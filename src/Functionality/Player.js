@@ -93,7 +93,6 @@ const Player = (turnBoolean = true) => {
   return player;
 };
 
-//add an additional check to placeFleetRandom and use the power of each ship to get all of its surrounding squares, check to make sure none of the surroundings squares are an object, end of story. fuck all of testing bullshit and fuck this waste of time project.
 
 export default Player;
 
@@ -113,4 +112,3 @@ export default Player;
 //   }
 // };
 
-//not yet, but i did test and simulate a full game and it seemed like it worked ok.  my current DOM logic is a mess because i'm still working on it. i'm struggling with the idea that the DOM logic and Game/Gameloop logic is suppose to be fully separate, right now my DOM logic is very coupled with my functional logic bc i don't really know how i'm suppose to keep my DOM logic isolated like it says without actually doing anything. this is my player class anyway//
