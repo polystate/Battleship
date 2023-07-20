@@ -23,11 +23,12 @@ describe("Component: Ship Creation", () => {
 });
 
 describe("Component: logInfo", () => {
-  test("logInfo should log name of ship 'Cruiser' and its health of 3, length, its undefined locations array, and its surrounding . It returns an object.", () => {
+  test("logInfo should log name of ship 'Cruiser' and its health of 3, length, alignment, its undefined locations array, and its surrounding. It returns an object.", () => {
     const cruiser = Ship("Cruiser");
     expect(cruiser.logInfo()).toMatchObject({
       name: "Cruiser",
       length: 3,
+      align: undefined,
       thisPartHit: false,
       locations: [],
       getSurroundings: expect.any(Function),

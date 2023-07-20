@@ -109,8 +109,8 @@ describe("[***Gameboard Module***]", () => {
       gameBoard.placeShip(submarine, [4, 4], "horizontal");
       expect(submarine.logInfo().locations).toStrictEqual([
         [4, 4],
-        [5, 4],
-        [6, 4],
+        [4, 5],
+        [4, 6],
       ]);
     });
     test("Valid placement of a ship should return true from the placeShip function", () => {
@@ -119,12 +119,12 @@ describe("[***Gameboard Module***]", () => {
     });
     test("placeShip should place 'Cruiser' vertically two squares (or its length - 1) above its origin", () => {
       gameBoard.placeShip(cruiser, [4, 4], "vertical");
-      expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
-      expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
+      expect(gameBoard.grid[5][4]).toStrictEqual(cruiser);
+      expect(gameBoard.grid[6][4]).toStrictEqual(cruiser);
     });
     test("placeShip should place 'Destroyer' horizontally one square (or its length - 1) to the right of its origin", () => {
       gameBoard.placeShip(destroyer, [0, 0], "horizontal");
-      expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
+      expect(gameBoard.grid[0][1]).toStrictEqual(destroyer);
     });
     test("placeShip attempts to place 'Cruiser' vertically two squares but goes out of bounds and it returns undefined", () => {
       expect(gameBoard.placeShip(cruiser, [4, 8], "vertical")).toBe(undefined);
@@ -145,7 +145,7 @@ describe("[***Gameboard Module***]", () => {
 
       // Verify that the grid remains unchanged
       expect(gameBoard.grid[4][4]).toStrictEqual(cruiser);
-      expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
+      expect(gameBoard.grid[5][4]).toStrictEqual(cruiser);
     });
 
     test("placeShip should return undefined when placing a ship at an invalid coordinate", () => {
@@ -170,11 +170,18 @@ describe("[***Gameboard Module***]", () => {
       gameBoard.placeShip(cruiser, [4, 4], "vertical");
       gameBoard.placeShip(destroyer, [0, 0], "horizontal");
       expect(gameBoard.grid[4][4]).toStrictEqual(cruiser);
-      expect(gameBoard.grid[4][5]).toStrictEqual(cruiser);
-      expect(gameBoard.grid[4][6]).toStrictEqual(cruiser);
+      expect(gameBoard.grid[5][4]).toStrictEqual(cruiser);
+      expect(gameBoard.grid[6][4]).toStrictEqual(cruiser);
       expect(gameBoard.grid[0][0]).toStrictEqual(destroyer);
-      expect(gameBoard.grid[1][0]).toStrictEqual(destroyer);
+      expect(gameBoard.grid[0][1]).toStrictEqual(destroyer);
     });
+  });
+
+  test("placeShip should assign ship's logInfo.align property from undefined to horizontal or vertical", () => {
+    gameBoard.placeShip(battleship, [5, 8], "horizontal");
+    gameBoard.placeShip(destroyer, [2, 2], "vertical");
+    expect(battleship.logInfo().align).toBe("horizontal");
+    expect(destroyer.logInfo().align).toBe("vertical");
   });
 
   describe("placeShipHorizontal and placeShipVertical", () => {
@@ -196,6 +203,12 @@ describe("[***Gameboard Module***]", () => {
         return count + row.filter((cell) => cell !== false).length;
       }, 0);
       expect(numShips).toBe(5);
+    });
+    test("placeShipHorizontal and placeShipVertical should assign ship's alignment", () => {
+      gameBoard.placeShipHorizontal(carrier, [4, 4]);
+      expect(carrier.logInfo().align).toBe("horizontal");
+      gameBoard.placeShipVertical(destroyer, [0, 0]);
+      expect(destroyer.logInfo().align).toBe("vertical");
     });
   });
 

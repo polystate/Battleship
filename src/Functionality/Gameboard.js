@@ -12,9 +12,9 @@ const Gameboard = () => {
     return x < 0 || x > 9 || y < 0 || y > 9;
   };
   const invalidCoordinate = (x, y) => {
-    return outOfBounds(x, y) || grid[x][y] !== false;
+    return outOfBounds(y, x) || grid[y][x] !== false;
   };
-  const isTouching = (x, y) => {
+  const isTouching = (y, x) => {
     const neighbors = [
       [x - 1, y],
       [x + 1, y],
@@ -45,37 +45,56 @@ const Gameboard = () => {
     }
     return true;
   };
+  // const appendTail = (ship, coord, align, tail) => {
+  //   const [x, y] = coord;
+  //   for (let i = 1; i <= tail; i++) {
+  //     if (align === "vertical") {
+  //       grid[x][y + i] = ship;
+  //       ship.logInfo().locations.push([x, y + i]);
+  //     } else if (align === "horizontal") {
+  //       grid[x + i][y] = ship;
+  //       ship.logInfo().locations.push([x + i, y]);
+  //     }
+  //   }
+  // };
+
   const appendTail = (ship, coord, align, tail) => {
     const [x, y] = coord;
     for (let i = 1; i <= tail; i++) {
       if (align === "vertical") {
-        grid[x][y + i] = ship;
-        ship.logInfo().locations.push([x, y + i]);
+        grid[y + i][x] = ship; // Flip the coordinates
+        ship.logInfo().locations.push([y + i, x]); // Flip the coordinates
       } else if (align === "horizontal") {
-        grid[x + i][y] = ship;
-        ship.logInfo().locations.push([x + i, y]);
+        grid[y][x + i] = ship; // Flip the coordinates
+        ship.logInfo().locations.push([y, x + i]); // Flip the coordinates
       }
     }
   };
+
   const placeShip = (ship, coord, align) => {
     if (!isTailValid(ship, coord, align)) return;
     const [x, y] = coord;
-    grid[x][y] = ship;
+    grid[y][x] = ship;
     const tail = ship.logInfo().length - 1;
-    ship.logInfo().locations.push([x, y]); //push origin
+    ship.logInfo().locations.push([y, x]); //push origin
     appendTail(ship, coord, align, tail);
+    ship.logInfo().align = align;
     return true;
   };
   const placeShipVertical = (ship, coord) => {
-    if (placeShip(ship, coord, "vertical")) return true;
+    if (placeShip(ship, coord, "vertical")) {
+      return true;
+    }
     return false;
   };
   const placeShipHorizontal = (ship, coord) => {
-    if (placeShip(ship, coord, "horizontal")) return true;
+    if (placeShip(ship, coord, "horizontal")) {
+      return true;
+    }
     return false;
   };
   const receiveAttack = (coord) => {
-    const [x, y] = coord;
+    const [y, x] = coord;
     if (!grid[x][y]) {
       grid[x][y] = null;
       return;

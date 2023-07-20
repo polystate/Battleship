@@ -138,9 +138,6 @@ describe("[***generateRandomShips***]", () => {
           }
         }
       }
-      // console.log(totalShipParts);
-
-      // Iterate over each ship part and check if it exists in the grid
       for (const [x, y] of ship.logInfo().locations) {
         expect(player.grid[x][y]).toBe(ship);
       }

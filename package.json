@@ -12,7 +12,7 @@
     "test:player": "jest --testPathPattern=Player.test.js",
     "test:gameboard": "jest --testPathPattern=Gameboard.test.js"
   },
-  "author": "",
+  "author": "Dock Adams",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.22.8",

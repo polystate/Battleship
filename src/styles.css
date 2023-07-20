@@ -41,7 +41,7 @@ body {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
 }
   
-.grid-cell {
+.cell {
     /* flex-basis: calc(10% - 8px);  */
     height: 2rem;
     /* padding-bottom: calc(10% - 8px); */
@@ -49,7 +49,7 @@ body {
     border: 1px solid var(--border-col); 
 }
 
-.grid-cell:hover {
+.cell:hover {
   background-color: rgba(var(--complementary), 0.25);
   cursor: pointer;
 }

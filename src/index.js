@@ -1,4 +1,10 @@
-import { initializeDOM } from "./Appearance/Setup";
+import gameLoop from "./Appearance/Game";
+import { displayGrid, clickGrid, placeShip } from "./Appearance/DOM";
+import Player from "./Functionality/Player";
 import "./styles.css";
 
-initializeDOM();
+const player = Player(true);
+player.placeFleetRandom();
+
+displayGrid(player, "p1grid");
+clickGrid(player, "p1grid");

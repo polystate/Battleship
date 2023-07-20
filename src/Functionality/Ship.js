@@ -15,6 +15,7 @@ const Ship = (name) => {
   const shipInfo = {
     name: name,
     length: length,
+    align: undefined,
     thisPartHit: false,
     locations: [],
     getSurroundings() {
