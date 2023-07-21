@@ -93,4 +93,26 @@ const Player = (turnBoolean = true) => {
   return player;
 };
 
+<<<<<<< HEAD
 export default Player;
+=======
+
+export default Player;
+
+// player.placeFleetRandom = () => {
+//   for (let shipName in shipChoices) {
+//     let ship = Ship(shipName);
+//     let isPlaced = false;
+//     let align;
+
+//     while (!isPlaced) {
+//       align = Math.random() < 0.5 ? "horizontal" : "vertical";
+//       if (player.placeShip(ship, player.selectRandCoord(), align)) {
+//         ship.logInfo().align = align;
+//         isPlaced = true;
+//       }
+//     }
+//   }
+// };
+
+>>>>>>> f9f780baae7d01f9377724024e288674e2922448
