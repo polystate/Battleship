@@ -32,6 +32,9 @@ const Ship = (name) => {
       }
       return Array.from(surroundings);
     },
+    clearLocations() {
+      this.locations = [];
+    },
   };
   const getHit = () => {
     if (timesHit === length) {

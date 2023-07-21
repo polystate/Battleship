@@ -20,11 +20,39 @@ const placeShipGrid = (entity, gridCells, cellClicked) => {
     const selectedShip = entity.grid[originX][originY];
     currentAlign = selectedShip.logInfo().align;
     const [targetX, targetY] = convertToArrCoord(cellClicked.id);
+
+    //if entity can place ship legally, it places it there already
     if (entity.placeShip(selectedShip, [targetY, targetX], currentAlign)) {
+      let prevLocations = selectedShip
+        .logInfo()
+        .locations.slice(0, selectedShip.logInfo().length);
+      selectedShip.logInfo().locations = selectedShip
+        .logInfo()
+        .locations.slice(selectedShip.logInfo().length);
+
+      //remove highlighted cells
       highlightedCells.forEach((cell) => {
         cell.classList.remove("highlight");
       });
-      entity.removeShip(selectedShip);
+
+      //add it onto the grid
+      gridCells.forEach((cell) => {
+        let arrCoord = convertToArrCoord(cell.id);
+        if (
+          selectedShip
+            .logInfo()
+            .locations.some(
+              (location) =>
+                location[0] === arrCoord[0] && location[1] === arrCoord[1]
+            )
+        ) {
+          cell.classList.add("ship");
+        }
+      });
+      prevLocations.forEach((location) => {
+        const [x, y] = location;
+        entity.grid[x][y] = false;
+      });
     }
   }
 };
