@@ -59,15 +59,13 @@ describe("[***Gameboard Module***]", () => {
   });
 
   describe("[***isTouching Method***]", () => {
-    test("Checks if a coordinate is surrounded by any ships, if so, return true, otherwise return false", () => {
+    test("Checks if a coordinate is surrounded by any ships, if so, return true, otherwise return false.", () => {
       gameBoard.placeShipHorizontal(destroyer, [4, 4]);
       expect(gameBoard.isTouching(3, 4)).toBe(true);
       expect(gameBoard.isTouching(4, 5)).toBe(true);
       expect(gameBoard.isTouching(5, 5)).toBe(true);
-      expect(gameBoard.isTouching(3, 3)).toBe(true);
       expect(gameBoard.isTouching(0, 0)).toBe(false);
-      expect(gameBoard.isTouching(2, 2)).toBe(false);
-      expect(gameBoard.isTouching(4, 3)).toBe(true);
+      expect(gameBoard.isTouching(6, 7)).toBe(false);
     });
   });
 

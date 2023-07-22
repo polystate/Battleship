@@ -31,7 +31,10 @@ const Gameboard = () => {
     });
   };
   const isTailValid = (ship, coord, align) => {
-    if (invalidCoordinate(coord[0], coord[1]) || isTouching(coord[0], coord[1]))
+    if (
+      invalidCoordinate(coord[0], coord[1]) ||
+      isTouching(coord[0], coord[1], ship)
+    )
       return;
     const [x, y] = coord;
     const tailLength = ship.logInfo().length - 1;
@@ -39,34 +42,22 @@ const Gameboard = () => {
       let tailX = x;
       let tailY = y;
       align === "vertical" ? (tailY += i) : (tailX += i);
-      if (invalidCoordinate(tailX, tailY) || isTouching(tailX, tailY)) {
+      if (invalidCoordinate(tailX, tailY) || isTouching(tailX, tailY, ship)) {
         return;
       }
     }
     return true;
   };
-  // const appendTail = (ship, coord, align, tail) => {
-  //   const [x, y] = coord;
-  //   for (let i = 1; i <= tail; i++) {
-  //     if (align === "vertical") {
-  //       grid[x][y + i] = ship;
-  //       ship.logInfo().locations.push([x, y + i]);
-  //     } else if (align === "horizontal") {
-  //       grid[x + i][y] = ship;
-  //       ship.logInfo().locations.push([x + i, y]);
-  //     }
-  //   }
-  // };
 
   const appendTail = (ship, coord, align, tail) => {
     const [x, y] = coord;
     for (let i = 1; i <= tail; i++) {
       if (align === "vertical") {
-        grid[y + i][x] = ship; // Flip the coordinates
-        ship.logInfo().locations.push([y + i, x]); // Flip the coordinates
+        grid[y + i][x] = ship;
+        ship.logInfo().locations.push([y + i, x]);
       } else if (align === "horizontal") {
-        grid[y][x + i] = ship; // Flip the coordinates
-        ship.logInfo().locations.push([y, x + i]); // Flip the coordinates
+        grid[y][x + i] = ship;
+        ship.logInfo().locations.push([y, x + i]);
       }
     }
   };

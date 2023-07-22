@@ -26,12 +26,22 @@ const Ship = (name) => {
             if (i === 0 && j === 0) {
               continue;
             }
-            surroundings.add([x + i, y + j]);
+            const newX = x + i;
+            const newY = y + j;
+            if (
+              !this.locations.some(
+                ([shipX, shipY]) => shipX === newX && shipY === newY
+              )
+            ) {
+              const key = `${newX},${newY}`;
+              surroundings.add(key);
+            }
           }
         }
       }
-      return Array.from(surroundings);
+      return Array.from(surroundings, (key) => key.split(",").map(Number));
     },
+
     clearLocations() {
       this.locations = [];
     },

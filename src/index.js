@@ -1,5 +1,5 @@
 import gameLoop from "./Appearance/Game";
-import { displayGrid, clickGrid, placeShip } from "./Appearance/DOM";
+import { displayGrid, clickGrid, placeShip } from "./Appearance/Setup";
 import Player from "./Functionality/Player";
 import "./styles.css";
 
