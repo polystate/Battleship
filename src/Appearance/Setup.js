@@ -1,5 +1,11 @@
 let shipClickedFlag = false;
-let currentAlign;
+let currentAlign = "vertical";
+
+const Setup = (entity, id) => {
+  switchAlign();
+  displayGrid(entity, id);
+  clickGrid(entity, id);
+};
 
 const clickGrid = (entity, id) => {
   const grid = document.getElementById(id);
@@ -20,15 +26,14 @@ const placeShipGrid = (entity, gridCells, cellClicked) => {
     const [originX, originY] = convertToArrCoord(highlightedCells[0].id);
     const selectedShip = entity.grid[originX][originY];
     const shipInfo = selectedShip.logInfo();
-    currentAlign = shipInfo.align;
+    shipInfo.align = currentAlign;
     let prevLocations = shipInfo.locations.slice(0, shipInfo.length);
     const [targetX, targetY] = convertToArrCoord(cellClicked.id);
-
     prevLocations.forEach(([x, y]) => {
       entity.grid[x][y] = false;
     });
     removeHighlights(gridCells, false);
-    if (!entity.isTailValid(selectedShip, [targetY, targetX], currentAlign)) {
+    if (!entity.isTailValid(selectedShip, [targetY, targetX], shipInfo.align)) {
       prevLocations.forEach(([x, y]) => {
         entity.grid[x][y] = selectedShip;
         gridCells.forEach((cell) => {
@@ -41,7 +46,7 @@ const placeShipGrid = (entity, gridCells, cellClicked) => {
       return;
     }
 
-    entity.placeShip(selectedShip, [targetY, targetX], currentAlign);
+    entity.placeShip(selectedShip, [targetY, targetX], shipInfo.align);
     shipInfo.locations = shipInfo.locations.slice(shipInfo.length);
 
     gridCells.forEach((cell) => {
@@ -71,6 +76,8 @@ const clickShip = (entity, gridCells, cellClicked) => {
 
 const highlightShip = (entity, gridCells, cellClicked) => {
   const [x, y] = convertToArrCoord(cellClicked.id);
+  // currentAlign = entity.grid[x][y].logInfo().align;
+
   const locations = entity.grid[x][y].logInfo().locations;
   locations.forEach((location) => {
     gridCells.forEach((cell) => {
@@ -108,8 +115,21 @@ const displayGrid = (entity, id) => {
   }
 };
 
+const switchAlign = () => {
+  const alignBtn = document.getElementById("align-swap");
+  alignBtn.addEventListener("click", () => {
+    if (currentAlign === "vertical") {
+      currentAlign = "horizontal";
+      alignBtn.textContent = `Set ${currentAlign}`;
+    } else {
+      currentAlign = "vertical";
+      alignBtn.textContent = `Set ${currentAlign}`;
+    }
+  });
+};
+
 const convertToArrCoord = (str) => {
   return str.split(",").map((num) => Number(num));
 };
 
-export { displayGrid, clickGrid, placeShipGrid };
+export { Setup };

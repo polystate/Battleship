@@ -7,6 +7,7 @@
   --grid-size: 10;
   --grid-cell-size: 10%;
   --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+  --container-width: 75%;
 }
 
 html, body{
@@ -27,7 +28,7 @@ body {
     display: flex;
     height: 40vh; 
     gap: var(--grid-cell-size);
-    width: 75%;
+    width: var(--container-width);
     padding: 5rem;
 }
   
@@ -45,10 +46,12 @@ body {
   
 .cell {
     /* flex-basis: calc(10% - 8px);  */
-    height: 2rem;
+    /* height: 2rem; */
     /* padding-bottom: calc(10% - 8px); */
     background-color: var(--grid-bg); 
     border: 1px solid var(--border-col); 
+    /* padding: 0;
+    margin: 0; */
 }
 
 .cell:hover {
@@ -58,28 +61,36 @@ body {
 
 .highlight{
   background-color: rgba(var(--complementary), 0.50);
-  border: 1px solid var(--grid-bg);
+  border: none;
+  /* border: 1px solid var(--grid-bg); */
   /* border-radius: 5rem;
   background: whitesmoke; */
+  /* background: whitesmoke; */
 }
 
 .ship{
   background: rgb(var(--complementary));
-  
+  border: none;
 }
 
 .enemy-ship{
   background: red;
 }
 
-#start-game{
-  width:75%;
+#align-container{
+  display: flex;
+  width: var(--container-width);
+  justify-content: center;
+}
+
+#log-container{
+  width: var(--container-width);
   display: flex;
   justify-content: center;
   
 }
 
-.btn-start{
+.oval-btn{
   height: 5rem;
   cursor: pointer;
   color: var(--ship-found);
@@ -93,7 +104,7 @@ body {
   font-weight: bold;
 }
 
-.btn-start:hover{
+.oval-btn:hover{
   border: none;
   box-shadow: var(--box-shadow);
   background:rgba(0, 0, 0, 0.3);
