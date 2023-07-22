@@ -6,6 +6,7 @@
   --ship-found: whitesmoke;
   --grid-size: 10;
   --grid-cell-size: 10%;
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
 }
 
 html, body{
@@ -27,6 +28,7 @@ body {
     height: 40vh; 
     gap: var(--grid-cell-size);
     width: 75%;
+    padding: 5rem;
 }
   
 .grid {
@@ -38,7 +40,7 @@ body {
     background-color: var(--grid-bg); 
     border: 1px solid var(--border-col); 
     border-bottom: 4px solid black;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+    box-shadow: var(--box-shadow);
 }
   
 .cell {
@@ -68,6 +70,36 @@ body {
 
 .enemy-ship{
   background: red;
+}
+
+#start-game{
+  width:75%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.btn-start{
+  height: 5rem;
+  cursor: pointer;
+  color: var(--ship-found);
+  background: var(--border-col);
+  border-radius: 75%;
+  border: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 50%;
+  letter-spacing: 2px;
+  transition: background 0.25s ease;
+  font-weight: bold;
+}
+
+.btn-start:hover{
+  border: none;
+  box-shadow: var(--box-shadow);
+  background:rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  color: rgba(var(--complementary),.50);
+  font-weight: bold;
 }
 
 

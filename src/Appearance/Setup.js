@@ -41,12 +41,9 @@ const placeShipGrid = (entity, gridCells, cellClicked) => {
       return;
     }
 
-    //if entity can place ship legally, it places it there
-    //or if the surrounding squares are not touching a ship and are legal, you can place it there
     entity.placeShip(selectedShip, [targetY, targetX], currentAlign);
     shipInfo.locations = shipInfo.locations.slice(shipInfo.length);
 
-    //add it onto the grid
     gridCells.forEach((cell) => {
       let arrCoord = convertToArrCoord(cell.id);
       if (
