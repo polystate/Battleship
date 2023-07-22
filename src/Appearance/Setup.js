@@ -2,7 +2,9 @@ let shipClickedFlag = false;
 let currentAlign = "vertical";
 
 const Setup = (entity, id) => {
-  switchAlign();
+  if (id === "p1grid") {
+    switchAlign();
+  }
   displayGrid(entity, id);
   clickGrid(entity, id);
 };
@@ -76,8 +78,6 @@ const clickShip = (entity, gridCells, cellClicked) => {
 
 const highlightShip = (entity, gridCells, cellClicked) => {
   const [x, y] = convertToArrCoord(cellClicked.id);
-  // currentAlign = entity.grid[x][y].logInfo().align;
-
   const locations = entity.grid[x][y].logInfo().locations;
   locations.forEach((location) => {
     gridCells.forEach((cell) => {

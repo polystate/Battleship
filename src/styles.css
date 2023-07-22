@@ -1,6 +1,7 @@
 :root{
   --background: #333333;
-  --grid-bg: #222222;
+  /* --grid-bg: #222222; */
+  --grid-bg: 34, 34, 34;
   --complementary: 255, 140, 0;
   --border-col: #555555;
   --ship-found: whitesmoke;
@@ -38,7 +39,7 @@ body {
     grid-template-columns: repeat(10, 1fr);
     width: 75%;
     max-width: 65%; 
-    background-color: var(--grid-bg); 
+    background-color: rgb(var(--grid-bg)); 
     border: 1px solid var(--border-col); 
     border-bottom: 4px solid black;
     box-shadow: var(--box-shadow);
@@ -48,7 +49,7 @@ body {
     /* flex-basis: calc(10% - 8px);  */
     /* height: 2rem; */
     /* padding-bottom: calc(10% - 8px); */
-    background-color: var(--grid-bg); 
+    background-color: rgb(var(--grid-bg)); 
     border: 1px solid var(--border-col); 
     /* padding: 0;
     margin: 0; */
@@ -87,8 +88,32 @@ body {
   width: var(--container-width);
   display: flex;
   justify-content: center;
-  
 }
+
+#p2grid{
+  position: relative;
+}
+
+#p2grid::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(var(--grid-bg), 1);
+  pointer-events: none; /*disable event listeners*/
+  z-index: 1;
+}
+
+#p2grid.overlay::before{
+  display: none;
+}
+
+#p2grid .cell{
+  cursor: default;
+}
+
 
 .oval-btn{
   height: 5rem;
