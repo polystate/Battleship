@@ -12,38 +12,56 @@ const startGame = (self, other) => {
   p2grid.style.zIndex = 0;
   p2grid.style.pointerEvents = "auto";
   p2grid.addEventListener("click", (e) => {
-    const cellClicked = e.target;
-    if (!cellClicked.classList.contains("cell")) return;
-    const [x, y] = convertToArrCoord(cellClicked.id);
-    const uniqueShot = self
-      .filterMoves()
-      .some(([xF, yF]) => xF === x && yF === y);
-    if (uniqueShot) {
-      if (self.attackEnemy(other, [x, y])) {
-        cellClicked.classList.add("ship");
-      } else {
-        cellClicked.classList.add("missed-shot");
-      }
-      const randAttack = other.randomAttack();
-      other.attackEnemy(self, randAttack);
-      const p1Nodes = Array.from(p1grid.childNodes);
-      p1Nodes.forEach((node) => {
-        const [x, y] = convertToArrCoord(node.id);
-        if (JSON.stringify([x, y]) === JSON.stringify(randAttack)) {
-          if (typeof self.grid[x][y] === "object" && self.grid[x][y] !== null) {
-            console.log("Computer found a ship");
-            setTimeout(() => {
-              node.classList.remove("ship");
-              node.classList.add("found-ship");
-            }, 500);
-          } else {
-            console.log("Computer missed");
-            setTimeout(() => {
-              node.classList.add("missed-shot");
-            }, 500);
-          }
+    if (self.isGameOver()) {
+      console.log("Computer has won.");
+    } else if (other.isGameOver()) {
+      console.log("Player has won.");
+    } else {
+      console.clear();
+      console.log(
+        `Amount of Player Ship Parts Hit: ${self.logBoardData().hits}`
+      );
+      console.log(
+        `Amount of Computer Ship Parts Hit: ${other.logBoardData().hits}`
+      );
+      //player
+      const cellClicked = e.target;
+      if (!cellClicked.classList.contains("cell")) return;
+      const [pX, pY] = convertToArrCoord(cellClicked.id);
+      const uniqueShot = self
+        .filterMoves()
+        .some(([xF, yF]) => xF === pX && yF === pY);
+      if (uniqueShot) {
+        if (self.attackEnemy(other, [pX, pY])) {
+          cellClicked.classList.add("found-ship");
+        } else {
+          cellClicked.classList.add("missed-shot");
         }
-      });
+        //computer
+        // const [rX, rY] = other.randomAttack();
+        let randAttack = other.randomAttack();
+        let [rY, rX] = randAttack;
+        other.attackEnemy(self, [rY, rX]);
+        const p1Nodes = Array.from(p1grid.childNodes);
+        p1Nodes.forEach((node) => {
+          const [cX, cY] = convertToArrCoord(node.id);
+          if (JSON.stringify([cX, cY]) === JSON.stringify([rX, rY])) {
+            if (
+              typeof self.grid[cX][cY] === "object" &&
+              self.grid[cX][cY] !== null
+            ) {
+              setTimeout(() => {
+                node.classList.remove("ship");
+                node.classList.add("found-ship");
+              }, 500);
+            } else {
+              setTimeout(() => {
+                node.classList.add("missed-shot");
+              }, 500);
+            }
+          }
+        });
+      }
     }
   });
 };

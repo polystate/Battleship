@@ -79,7 +79,7 @@ body {
 }
 
 .found-ship{
-  background: var(--border-col)
+  background: var(--ship-found);
 }
 
 .found-entire-ship{
