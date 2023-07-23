@@ -1,14 +1,15 @@
-:root{
-  --background: #333333;
-  /* --grid-bg: #222222; */
-  --grid-bg: 34, 34, 34;
-  --complementary: 255, 140, 0;
-  --border-col: #555555;
-  --ship-found: whitesmoke;
+:root {
+  --background: #02160b;
+  --grid-bg: 10,10,10;
+  --complementary: 204, 96, 46;
+  --border-col: #111010;
+  --ship-found: #27ae60;
   --grid-size: 10;
   --grid-cell-size: 10%;
-  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   --container-width: 75%;
+  --ship-rad: 0%;
+  --target-rad: 100%;
 }
 
 html, body{
@@ -18,7 +19,7 @@ html, body{
 }
 
 body {
-    background-color: var(--background);
+    background: var(--background);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,16 +40,13 @@ body {
     grid-template-columns: repeat(10, 1fr);
     width: 75%;
     max-width: 65%; 
-    background-color: rgb(var(--grid-bg)); 
+    background: rgb(var(--grid-bg)); 
     border: 1px solid var(--border-col); 
     border-bottom: 4px solid black;
     box-shadow: var(--box-shadow);
 }
   
 .cell {
-    /* flex-basis: calc(10% - 8px);  */
-    /* height: 2rem; */
-    /* padding-bottom: calc(10% - 8px); */
     background-color: rgb(var(--grid-bg)); 
     border: 1px solid var(--border-col); 
     /* padding: 0;
@@ -63,6 +61,7 @@ body {
 .highlight{
   background-color: rgba(var(--complementary), 0.50);
   border: none;
+  border-radius: var(--ship-rad);
   /* border: 1px solid var(--grid-bg); */
   /* border-radius: 5rem;
   background: whitesmoke; */
@@ -72,14 +71,21 @@ body {
 .ship{
   background: rgb(var(--complementary));
   border: none;
+  /* border-radius: 10%; */
+  border-radius: var(--ship-rad);
 }
 
 .missed-shot{
   background: rgb(121, 55, 55);
+  border-radius: 100%;
+  border: none;
 }
 
 .found-ship{
   background: var(--ship-found);
+  border-radius: var(--ship-rad);
+  /* background: rgb(var(--complementary)); */
+  border: none;
 }
 
 .found-entire-ship{
@@ -96,6 +102,12 @@ body {
   width: var(--container-width);
   display: flex;
   justify-content: center;
+}
+
+#log-content{
+  background: rgb(var(--grid-bg));
+  width: 100%;
+  height: 5rem;
 }
 
 #p2grid{
@@ -127,8 +139,10 @@ body {
   height: 5rem;
   cursor: pointer;
   color: var(--ship-found);
-  background: var(--border-col);
-  border-radius: 75%;
+  color: whitesmoke;
+  /* background: var(--border-col); */
+  background: rgb(var(--grid-bg));
+  /* border-radius: var(--ship-rad); */
   border: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   width: 50%;
@@ -141,10 +155,47 @@ body {
   border: none;
   box-shadow: var(--box-shadow);
   background:rgba(0, 0, 0, 0.3);
-  border-radius: 100%;
-  color: rgba(var(--complementary),.50);
+  /* border-radius: 100%; */
+  /* color: rgba(var(--complementary),.50); */
   font-weight: bold;
 }
 
 
   
+
+
+/* :root{
+  --background: #333333;
+  --grid-bg: 34, 34, 34;
+  --complementary: 255, 140, 0;
+  --border-col: #555555;
+  --ship-found: whitesmoke;
+  --grid-size: 10;
+  --grid-cell-size: 10%;
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+  --container-width: 75%;
+} */
+
+/* :root{
+  --background: #2c3e50;
+  --grid-bg: #34495e;
+  --complementary: #e67e22;
+  --border-col: #555555;
+  --ship-found: #3498db;
+  --grid-size: 10;
+  --grid-cell-size: 10%;
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+  --container-width: 75%;
+} */
+
+/* :root {
+  --background: #1a1a1a;
+  --grid-bg: #0d0d0d;
+  --complementary: #2ecc71;
+  --border-col: #555555;
+  --ship-found: #27ae60;
+  --grid-size: 10;
+  --grid-cell-size: 10%;
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  --container-width: 75%;
+} */

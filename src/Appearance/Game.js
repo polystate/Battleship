@@ -1,9 +1,19 @@
-import Player from "../Functionality/Player";
 import { convertToArrCoord } from "./Setup";
 
 const initializeGame = async (self, other) => {
   await finishSetUp();
+  changeDOMElements();
   startGame(self, other);
+};
+
+const changeDOMElements = () => {
+  document.getElementById("start-game").remove();
+  const logContainer = document.getElementById("log-container");
+  const logContent = document.createElement("div");
+  logContent.setAttribute("id", "log-content");
+  logContainer.appendChild(logContent);
+  const alignBtn = document.getElementById("align-swap");
+  alignBtn.textContent = "Reset";
 };
 
 const startGame = (self, other) => {
@@ -12,12 +22,12 @@ const startGame = (self, other) => {
   p2grid.style.zIndex = 0;
   p2grid.style.pointerEvents = "auto";
   p2grid.addEventListener("click", (e) => {
+    console.clear();
     if (self.isGameOver()) {
       console.log("Computer has won.");
     } else if (other.isGameOver()) {
       console.log("Player has won.");
     } else {
-      console.clear();
       console.log(
         `Amount of Player Ship Parts Hit: ${self.logBoardData().hits}`
       );
@@ -38,9 +48,8 @@ const startGame = (self, other) => {
           cellClicked.classList.add("missed-shot");
         }
         //computer
-        // const [rX, rY] = other.randomAttack();
-        let randAttack = other.randomAttack();
-        let [rY, rX] = randAttack;
+        const randAttack = other.randomAttack();
+        const [rY, rX] = randAttack;
         other.attackEnemy(self, [rY, rX]);
         const p1Nodes = Array.from(p1grid.childNodes);
         p1Nodes.forEach((node) => {
@@ -83,17 +92,6 @@ const finishSetUp = () => {
       resolve();
     });
   });
-};
-
-const gameLog = () => {
-  const shipTargeted = other.grid[y][x];
-  if (shipTargeted) {
-    if (shipTargeted.isSunk()) {
-      console.log(`Ship ${shipTargeted.logInfo().name} has been sunk!`);
-    } else {
-      console.log(`Ship ${shipTargeted.logInfo().name} was attacked!`);
-    }
-  }
 };
 
 export { initializeGame };
