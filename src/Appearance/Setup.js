@@ -132,4 +132,4 @@ const convertToArrCoord = (str) => {
   return str.split(",").map((num) => Number(num));
 };
 
-export { Setup };
+export { Setup, displayGrid, convertToArrCoord };

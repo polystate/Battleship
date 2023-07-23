@@ -74,8 +74,16 @@ body {
   border: none;
 }
 
-.enemy-ship{
-  background: red;
+.missed-shot{
+  background: rgb(121, 55, 55);
+}
+
+.found-ship{
+  background: var(--border-col)
+}
+
+.found-entire-ship{
+  background: var(--ship-found);
 }
 
 #align-container{

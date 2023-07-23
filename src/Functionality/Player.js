@@ -22,10 +22,11 @@ const Player = (turnBoolean = true) => {
     return turn;
   };
   player.attackEnemy = (other, coordinate) => {
-    other.receiveAttack(coordinate);
+    const didAttackHit = other.receiveAttack(coordinate);
     player.switchTurn();
     other.switchTurn();
     shotsFired.push(coordinate);
+    return didAttackHit;
   };
   player.getAttempts = () => {
     return shotsFired;

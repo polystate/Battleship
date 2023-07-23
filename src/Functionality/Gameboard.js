@@ -86,10 +86,13 @@ const Gameboard = () => {
   };
   const receiveAttack = (coord) => {
     const [y, x] = coord;
+
+    //if the cell is falsey, make it null
     if (!grid[x][y]) {
       grid[x][y] = null;
       return;
     }
+    //if the cell is typeof object ship or null (also an object)
     if (typeof grid[x][y] === "object") {
       if (grid[x][y].isSunk()) return;
       grid[x][y].getHit();
