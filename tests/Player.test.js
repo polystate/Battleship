@@ -1,22 +1,7 @@
 import Player from "../src/Functionality/Player.js";
 import { Ship, shipChoices } from "../src/Functionality/Ship.js";
+import { generateTestArr } from "../src/Utils/utils.js";
 
-//Helper Test Functions
-const generateTestArr = (x, y) => {
-  let testArr = [];
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      testArr.push([i, j]);
-    }
-  }
-  testArr.splice(
-    testArr.findIndex((coord) => coord[0] === x && coord[1] === y),
-    1
-  );
-  return testArr;
-};
-
-//Tests
 describe("Component: Initialize Players", () => {
   test("The Player factory should inherit all methods from the Gameboard factory", () => {
     const player = Player();

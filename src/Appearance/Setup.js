@@ -1,5 +1,6 @@
 let shipClickedFlag = false;
 let currentAlign = "vertical";
+let clickHandlerRef;
 
 const Setup = (entity, id) => {
   if (id === "p1grid") {
@@ -12,11 +13,14 @@ const Setup = (entity, id) => {
 const clickGrid = (entity, id) => {
   const grid = document.getElementById(id);
   const gridCells = Array.from(grid.childNodes);
-  grid.addEventListener("click", function clickHandler(e) {
-    const cellClicked = e.target;
-    if (!cellClicked.classList.contains("cell")) return;
-    clickShip(entity, gridCells, cellClicked);
-  });
+  clickHandlerRef = (e) => clickHandler(entity, gridCells, e);
+  grid.addEventListener("click", clickHandlerRef);
+};
+
+const clickHandler = (entity, gridCells, e) => {
+  const cellClicked = e.target;
+  if (!cellClicked.classList.contains("cell")) return;
+  clickShip(entity, gridCells, cellClicked);
 };
 
 const placeShipGrid = (entity, gridCells, cellClicked) => {
@@ -132,4 +136,4 @@ const convertToArrCoord = (str) => {
   return str.split(",").map((num) => Number(num));
 };
 
-export { Setup, displayGrid, convertToArrCoord };
+export { Setup, displayGrid, convertToArrCoord, clickHandlerRef };

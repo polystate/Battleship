@@ -1,30 +1,7 @@
 import Gameboard from "../src/Functionality/Gameboard.js";
 import { Ship } from "../src/Functionality/Ship.js";
+import { destroyEntireShip, placeEntireShip } from "../src/Utils/utils.js";
 
-//Helper Methods
-const destroyEntireShip = (board, ship, origin, alignment) => {
-  const [x, y] = origin;
-  for (let i = 0; i < ship.logInfo().length; i++) {
-    if (alignment === "vertical") {
-      board.receiveAttack([x, y + i]);
-    } else {
-      board.receiveAttack([x + i, y]);
-    }
-  }
-};
-
-const placeEntireShip = (board, ship, origin, alignment) => {
-  const [x, y] = origin;
-  for (let i = 0; i < ship.logInfo().length; i++) {
-    if (alignment === "vertical") {
-      board.grid[x][y + i] = ship;
-    } else {
-      board.grid[x + i][y] = ship;
-    }
-  }
-};
-
-//Tests
 describe("[***Gameboard Module***]", () => {
   //Test Variables
   let gameBoard;
@@ -42,6 +19,7 @@ describe("[***Gameboard Module***]", () => {
     carrier = Ship("Carrier");
     destroyer = Ship("Destroyer");
   });
+  //Test Blocks
   describe("[***Initialization***]", () => {
     test("Gameboard should initialize a shipPartsHit counter to 0", () => {
       expect(gameBoard.shipPartsHit).toBe(0);

@@ -1,4 +1,4 @@
-import { convertToArrCoord } from "./Setup";
+import { convertToArrCoord, clickHandlerRef } from "./Setup";
 
 const initializeGame = async (self, other) => {
   await finishSetUp();
@@ -8,6 +8,8 @@ const initializeGame = async (self, other) => {
 
 const changeDOMElements = () => {
   document.getElementById("start-game").remove();
+  const p1grid = document.getElementById("p1grid");
+  p1grid.removeEventListener("click", clickHandlerRef);
   const logContainer = document.getElementById("log-container");
   const logContent = document.createElement("div");
   logContent.setAttribute("id", "log-content");
@@ -22,55 +24,45 @@ const startGame = (self, other) => {
   p2grid.style.zIndex = 0;
   p2grid.style.pointerEvents = "auto";
   p2grid.addEventListener("click", (e) => {
-    console.clear();
-    if (self.isGameOver()) {
-      console.log("Computer has won.");
-    } else if (other.isGameOver()) {
-      console.log("Player has won.");
-    } else {
-      console.log(
-        `Amount of Player Ship Parts Hit: ${self.logBoardData().hits}`
-      );
-      console.log(
-        `Amount of Computer Ship Parts Hit: ${other.logBoardData().hits}`
-      );
-      //player
-      const cellClicked = e.target;
-      if (!cellClicked.classList.contains("cell")) return;
-      const [pX, pY] = convertToArrCoord(cellClicked.id);
-      const uniqueShot = self
-        .filterMoves()
-        .some(([xF, yF]) => xF === pX && yF === pY);
-      if (uniqueShot) {
-        if (self.attackEnemy(other, [pX, pY])) {
-          cellClicked.classList.add("found-ship");
-        } else {
-          cellClicked.classList.add("missed-shot");
-        }
-        //computer
-        const randAttack = other.randomAttack();
-        const [rY, rX] = randAttack;
-        other.attackEnemy(self, [rY, rX]);
-        const p1Nodes = Array.from(p1grid.childNodes);
-        p1Nodes.forEach((node) => {
-          const [cX, cY] = convertToArrCoord(node.id);
-          if (JSON.stringify([cX, cY]) === JSON.stringify([rX, rY])) {
-            if (
-              typeof self.grid[cX][cY] === "object" &&
-              self.grid[cX][cY] !== null
-            ) {
-              setTimeout(() => {
-                node.classList.remove("ship");
-                node.classList.add("found-ship");
-              }, 500);
-            } else {
-              setTimeout(() => {
-                node.classList.add("missed-shot");
-              }, 500);
-            }
-          }
-        });
+    const isGameOver = gameAnnouncer(self, other);
+    if (isGameOver) return;
+    //player
+    const cellClicked = e.target;
+    if (!cellClicked.classList.contains("cell")) return;
+    const [pX, pY] = convertToArrCoord(cellClicked.id);
+    const uniqueShot = self
+      .filterMoves()
+      .some(([xF, yF]) => xF === pX && yF === pY);
+    if (uniqueShot) {
+      if (self.attackEnemy(other, [pX, pY])) {
+        cellClicked.classList.add("found-ship");
+      } else {
+        cellClicked.classList.add("missed-shot");
       }
+      //computer
+      const randAttack = other.randomAttack();
+      const [rY, rX] = randAttack;
+      other.attackEnemy(self, [rY, rX]);
+      const p1Nodes = Array.from(p1grid.childNodes);
+      p1Nodes.forEach((node) => {
+        const [cX, cY] = convertToArrCoord(node.id);
+        if (JSON.stringify([cX, cY]) === JSON.stringify([rX, rY])) {
+          const randDelay = Math.random() * (1500 - 500) + 500;
+          if (
+            typeof self.grid[cX][cY] === "object" &&
+            self.grid[cX][cY] !== null
+          ) {
+            setTimeout(() => {
+              node.classList.remove("ship");
+              node.classList.add("found-ship");
+            }, randDelay);
+          } else {
+            setTimeout(() => {
+              node.classList.add("missed-shot");
+            }, randDelay);
+          }
+        }
+      });
     }
   });
 };
@@ -92,6 +84,22 @@ const finishSetUp = () => {
       resolve();
     });
   });
+};
+
+const gameAnnouncer = (self, other) => {
+  const logContent = document.getElementById("log-content");
+  if (self.isGameOver()) {
+    logContent.textContent = "Computer has won.";
+    return true;
+  } else if (other.isGameOver()) {
+    logContent.textContent = "Player has won.";
+    return true;
+  } else {
+    logContent.textContent = `Player Ships Hit: ${
+      self.logBoardData().hits
+    } | Computer Ships Hit: ${other.logBoardData().hits}`;
+    return false;
+  }
 };
 
 export { initializeGame };

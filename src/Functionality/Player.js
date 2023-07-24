@@ -1,15 +1,6 @@
 import Gameboard from "./Gameboard.js";
 import { Ship, shipChoices } from "./Ship.js";
-
-const generateAllCoords = () => {
-  let testArr = [];
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      testArr.push([i, j]);
-    }
-  }
-  return testArr;
-};
+import { generateAllCoords } from "../Utils/utils.js";
 
 const Player = (turnBoolean = true) => {
   const player = Object.create(Gameboard());
