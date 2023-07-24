@@ -1,5 +1,3 @@
-import { shipChoices } from "./Ship.js";
-
 const Gameboard = () => {
   const grid = Array.from({ length: 10 }, () => Array(10).fill(false));
   let shipPartsHit = 0;
@@ -73,26 +71,19 @@ const Gameboard = () => {
     return true;
   };
   const placeShipVertical = (ship, coord) => {
-    if (placeShip(ship, coord, "vertical")) {
-      return true;
-    }
+    if (placeShip(ship, coord, "vertical")) return true;
     return false;
   };
   const placeShipHorizontal = (ship, coord) => {
-    if (placeShip(ship, coord, "horizontal")) {
-      return true;
-    }
+    if (placeShip(ship, coord, "horizontal")) return true;
     return false;
   };
   const receiveAttack = (coord) => {
     const [y, x] = coord;
-
-    //if the cell is falsey, make it null
     if (!grid[x][y]) {
       grid[x][y] = null;
       return;
     }
-    //if the cell is typeof object ship or null (also an object)
     if (typeof grid[x][y] === "object") {
       if (grid[x][y].isSunk()) return;
       grid[x][y].getHit();

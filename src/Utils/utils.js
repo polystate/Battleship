@@ -1,3 +1,5 @@
+//DOM and General Purpose
+
 const setFavicon = (url) => {
   const head = document.head || document.getElementsByTagName("head")[0];
   const existingFavicon = document.getElementById("favicon");

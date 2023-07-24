@@ -1,6 +1,8 @@
-let shipClickedFlag = false;
-let currentAlign = "vertical";
+import dragShip from "../Utils/dragShip.js";
+
 let clickHandlerRef;
+let isShipClicked = false;
+let currentAlign = "vertical";
 
 const Setup = (entity, id) => {
   if (id === "p1grid") {
@@ -70,28 +72,32 @@ const placeShipGrid = (entity, gridCells, cellClicked) => {
 };
 
 const clickShip = (entity, gridCells, cellClicked) => {
-  if (cellClicked.className.includes("ship") && !shipClickedFlag) {
-    highlightShip(entity, gridCells, cellClicked);
-    shipClickedFlag = true;
+  if (cellClicked.className.includes("ship") && !isShipClicked) {
+    const highlightedNodes = highlightShip(entity, gridCells, cellClicked);
+    // dragShip(highlightedNodes);
+    isShipClicked = true;
   } else {
     placeShipGrid(entity, gridCells, cellClicked);
     removeHighlights(gridCells, true);
-    shipClickedFlag = false;
+    isShipClicked = false;
   }
 };
 
 const highlightShip = (entity, gridCells, cellClicked) => {
   const [x, y] = convertToArrCoord(cellClicked.id);
   const locations = entity.grid[x][y].logInfo().locations;
+  const highlightedNodes = [];
   locations.forEach((location) => {
     gridCells.forEach((cell) => {
       const cellLocation = convertToArrCoord(cell.id);
       if (JSON.stringify(cellLocation) === JSON.stringify(location)) {
+        highlightedNodes.push(cell);
         cell.classList.remove("ship");
         cell.classList.add("highlight");
       }
     });
   });
+  return highlightedNodes;
 };
 
 const removeHighlights = (gridCells, isShipAdded) => {

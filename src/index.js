@@ -2,8 +2,9 @@ import { initializeGame } from "./Appearance/Game";
 import { Setup, displayGrid } from "./Appearance/Setup";
 import { setFavicon } from "./Utils/utils.js";
 import Player from "./Functionality/Player";
-import "./styles.css";
+
 import Icon from "./Assets/battleship.png";
+import "./styles.css";
 
 setFavicon(Icon);
 
